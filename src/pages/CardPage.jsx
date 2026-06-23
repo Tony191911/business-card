@@ -1,18 +1,20 @@
+import { useParams } from 'react-router-dom'
 import { UserCircle, Smartphone, Share2, UserPlus } from 'lucide-react'
+import { mockCards } from '../config/mockCards'
 
 function CardPage() {
-  // TODO: 之後改成從 URL hash 讀取
-  const data = {
-    name: '覃慧芬',
-    title: '室內設計師',
-    company: '承麗實業有限公司',
-    brand: '品宸室內設計',
-    mobile: '0937-721470',
-    fax: '04-2381-1649',
-    taxId: '80433113',
-    email: 'fen19192005@yahoo.com.tw',
-    address: '408台中市南屯區楓和路676號',
-    services: ['住宅裝修設計施工', '系統櫥櫃設計施工', '辦公室設備銷售及規劃施工'],
+  const { slug } = useParams()
+
+  const data = mockCards.find(
+    card => card.slug === slug && card.status === 'published'
+  )
+
+  if (!data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-gray-500">
+        找不到這張電子名片
+      </div>
+    )
   }
 
   // 次要聯絡欄位：label + value，只顯示有值的
@@ -126,11 +128,13 @@ function CardPage() {
                 </p>
 
                 <div className="flex flex-col items-start" style={{ gap: 3 }}>
-                  {data.services.map((s, i) => (
-                    <p key={i} className="text-[13px] text-gray-800">
-                      · {s}
-                    </p>
-                  ))}
+                  {data.services
+                    .sort((a, b) => a.sortOrder - b.sortOrder)
+                    .map(service => (
+                      <p key={service.id} className="text-[13px] text-gray-800">
+                        · {service.serviceName}
+                      </p>
+                    ))}
                 </div>
               </div>
             )}
