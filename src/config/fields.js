@@ -1,0 +1,17 @@
+export const fields = {
+  name:        { label: '姓名',     placeholder: '王小明',                   required: true  },
+  title:       { label: '職稱',     placeholder: '設計師',                   required: false },
+  company:     { label: '公司名稱', placeholder: '承麗實業有限公司',          required: false },
+  companyEn:   { label: '公司英文名', placeholder: 'Cheng Li Co., ltd',      required: false },
+  brand:       { label: '品牌/部門', placeholder: '品宸室內設計',             required: false },
+  mobile:      { label: '行動電話', placeholder: '0937-721470',              required: true  },
+  officePhone: { label: '公司電話', placeholder: '04-2381-1682',             required: false },
+  fax:         { label: '傳真',     placeholder: '04-2381-1649',             required: false },
+  email:       { label: 'Email',    placeholder: 'name@example.com',        required: false },
+  address:     { label: '地址',     placeholder: '408台中市南屯區楓和路676號', required: false },
+  taxId:       { label: '統一編號', placeholder: '80433113',                 required: false },
+  services:    { label: '服務項目', placeholder: '住宅裝修設計施工',           required: false, type: 'list' },
+  website:     { label: '網站',     placeholder: 'www.example.com',         required: false },
+  github:      { label: 'GitHub',   placeholder: 'github.com/username',     required: false },
+  linkedin:    { label: 'LinkedIn', placeholder: 'linkedin.com/in/username', required: false },
+}
