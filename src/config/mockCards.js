@@ -19,7 +19,7 @@ export const mockCards = [
 
     website: '',
 
-    avatarUrl: '',
+    avatarUrl: '/avatar.jpg',
     logoUrl: '',
 
     services: [
