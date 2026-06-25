@@ -1,12 +1,12 @@
-import { useParams } from 'react-router-dom'
-import { UserCircle, Smartphone, Share2, UserPlus } from 'lucide-react'
+import { Link, useParams } from 'react-router-dom'
+import { Share2, Smartphone, UserCircle, UserPlus } from 'lucide-react'
 import { mockCards } from '../config/mockCards'
 
 function CardPage() {
   const { slug } = useParams()
 
   const data = mockCards.find(
-    card => card.slug === slug && card.status === 'published'
+    (card) => card.slug === slug && card.status === 'published'
   )
 
   if (!data) {
@@ -17,18 +17,22 @@ function CardPage() {
     )
   }
 
-  // 次要聯絡欄位：label + value，只顯示有值的
+  const sortedServices = [...(data.services || [])].sort(
+    (a, b) => a.sortOrder - b.sortOrder
+  )
+
   const detailFields = [
+    { label: '公司電話', value: data.officePhone },
     { label: '傳真號碼', value: data.fax },
     { label: '統一編號', value: data.taxId },
-    { label: 'Email',    value: data.email },
-    { label: '地址',     value: data.address },
-    { label: '網站',     value: data.website },
-    { label: 'GitHub',   value: data.github },
-    { label: 'LinkedIn', value: data.linkedin },
-  ].filter(f => f.value)
+    { label: 'Email', value: data.email },
+    { label: '地址', value: data.address },
+    { label: '網站', value: data.website },
+  ].filter((field) => field.value)
 
   function handleAddContact() {
+    const cardUrl = `${window.location.origin}/card/${data.slug}`
+
     const lines = [
       'BEGIN:VCARD',
       'VERSION:3.0',
@@ -37,158 +41,155 @@ function CardPage() {
       `TITLE:${data.title || ''}`,
       data.mobile ? `TEL;TYPE=CELL:${data.mobile}` : '',
       data.email ? `EMAIL:${data.email}` : '',
-      data.address ? `ADR:;;${data.address};;;;` : '',
+      data.address ? `ADR;TYPE=WORK:;;${data.address};;;;` : '',
+      data.avatarUrl ? `PHOTO;VALUE=URI:${data.avatarUrl}` : '',
+      `NOTE:電子名片：${cardUrl}`,
       'END:VCARD',
     ].filter(Boolean)
- 
+
     const vcard = lines.join('\r\n')
     const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' })
     const url = URL.createObjectURL(blob)
- 
+
     const link = document.createElement('a')
     link.href = url
     link.download = `${data.name || 'contact'}.vcf`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
     URL.revokeObjectURL(url)
   }
 
   return (
-    <div className="flex justify-center items-start min-h-screen">
-      {/* 名片本體 390×852 */}
-      <div
-        className="relative flex flex-col overflow-hidden rounded-none sm:rounded-[20px] border border-gray-200 bg-white"
-        style={{ width: '100%', maxWidth: 430, minHeight: 932 }}
-      >
+    <div className="flex min-h-screen w-full justify-center bg-white text-[#1E293B] lg:items-center lg:bg-[#f0f0f0] lg:py-10">
+      <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-white lg:min-h-[760px] lg:max-w-[430px] lg:rounded-2xl lg:shadow-2xl">
+        {/* 上半部：身份資訊 */}
+        <section className="flex w-full flex-col items-center bg-[#F5F3EE] px-6 pb-12 pt-20 text-center">
+          {data.avatarUrl ? (
+            <img
+              src={data.avatarUrl}
+              alt={data.name}
+              className="h-[100px] w-[100px] rounded-full border border-gray-200 bg-white object-cover p-1 shadow-sm"
+            />
+          ) : (
+            <div className="flex h-[100px] w-[100px] items-center justify-center rounded-full border border-gray-200 bg-white p-1 shadow-sm">
+              <UserCircle size={62} strokeWidth={1.2} className="text-gray-300" />
+            </div>
+          )}
 
-        {/* 上半：身份區 */}
-        <div
-          className="flex flex-col items-center justify-end shrink-0 border-b border-gray-200"
-          style={{
-            height: 420,
-            backgroundColor: '#F5EFE6',
-            padding: '0 32px 36px',
-            gap: 10,
-          }}
-        >
-          {/* 頭像預設 icon */}
-          <div
-            className="flex items-center justify-center rounded-full border border-dashed border-gray-300 mb-2"
-            style={{ width: 100, height: 100 }}
-          >
-            <UserCircle size={64} strokeWidth={1} className="text-gray-400" />
-          </div>
-
-          <p className="text-[28px] font-medium text-gray-900 text-center leading-tight">
+          <h1 className="mt-6 text-[28px] font-semibold leading-tight tracking-wide text-[#1E293B]">
             {data.name}
-          </p>
+          </h1>
+
           {data.company && (
-            <p className="text-[14px] text-gray-500 text-center">{data.company}</p>
+            <p className="mt-3 text-[14px] font-medium tracking-wider text-[#475569]">
+              {data.company}
+            </p>
           )}
-          {data.brand && (
-            <p className="text-[13px] text-gray-400 text-center">{data.brand}</p>
+
+          {data.companyEn && (
+            <p className="mt-1 text-[12px] tracking-wide text-[#94A3B8]">
+              {data.companyEn}
+            </p>
           )}
+
           {data.title && (
-            <p className="text-[13px] text-gray-400 text-center">{data.title}</p>
+            <p className="mt-2 text-[13px] text-[#94A3B8]">
+              {data.title}
+            </p>
           )}
-        </div>
+        </section>
 
-        {/* 下半：聯絡區 */}
-        <div
-          className="flex flex-col flex-1"
-          style={{ padding: '28px 28px 24px' }}
-        >
+        {/* 下半部：名片資訊 */}
+        <section className="flex flex-1 flex-col bg-white px-8 pb-8 pt-10">
+          {/* primary-contact：行動電話 + 服務項目 */}
+          {(data.mobile || sortedServices.length > 0) && (
+            <div className="flex justify-between" style={{ marginBottom: 0, gap: 16 }}>
+              {/* 左欄：行動電話 */}
+              <div className="flex flex-col items-center" style={{ transform: 'translateX(40px)' }}>
+                <div className="flex items-center justify-center" style={{ height: 20 }}>
+                  <Smartphone size={20} strokeWidth={1.5} className="text-gray-400" />
+                </div>
 
-        {/* primary-contact：行動電話 + 服務項目 */}
-        {(data.mobile || (data.services && data.services.length > 0)) && (
-          <div className="flex justify-between" style={{ marginBottom: 0, gap: 16 }}>
-
-            {/* 左欄：行動電話 */}
-            <div className="flex flex-col items-center" style={{ width: '35%' }}>
-              <div className="flex items-center justify-center" style={{ height: 20 }}>
-                <Smartphone size={16} strokeWidth={1.5} className="text-gray-400" />
+                {data.mobile && (
+                  <div
+                    className="flex flex-1 items-center justify-center"
+                    style={{ marginTop: 12 }}
+                  >
+                    <p className="text-[13px] text-gray-800">{data.mobile}</p>
+                  </div>
+                )}
               </div>
 
-              {data.mobile && (
-                <div className="flex flex-1 items-center justify-center" style={{ marginTop: 12 }}>
-                  <p className="text-[13px] text-gray-800">{data.mobile}</p>
-                </div>
-              )}
-            </div>
+              {/* 右欄：服務項目 */}
+              {sortedServices.length > 0 && (
+                <div className="flex flex-col" style={{ gap: 6, width: '55%' }}>
+                  <p
+                    className="text-[13px] text-gray-400 text-center"
+                    style={{ height: 20, lineHeight: '20px' }}
+                  >
+                    服務項目
+                  </p>
 
-            {/* 右欄：服務項目 */}
-            {data.services && data.services.length > 0 && (
-              <div className="flex flex-col" style={{ gap: 6, width: '55%' }}>
-                <p
-                  className="text-[13px] text-gray-400 text-center"
-                  style={{ height: 20, lineHeight: '20px' }}
-                >
-                  服務項目
-                </p>
-
-                <div className="flex flex-col items-start" style={{ gap: 3 }}>
-                  {data.services
-                    .sort((a, b) => a.sortOrder - b.sortOrder)
-                    .map(service => (
+                  <div 
+                    className="flex flex-col items-start" 
+                    style={{ gap: 3, paddingLeft: 16 }}
+                  >
+                    {sortedServices.map((service) => (
                       <p key={service.id} className="text-[13px] text-gray-800">
                         · {service.serviceName}
                       </p>
                     ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
-
-          {/* 分隔線 */}
-          {detailFields.length > 0 && (
-            <div
-              className="w-full bg-gray-200"
-              style={{ height: '0.5px', marginTop: 4, marginBottom: 12 }}
-            />
+              )}
+            </div>
           )}
 
-          {/* contact-details：其餘欄位 */}
           {detailFields.length > 0 && (
-            <div className="flex flex-col">
-              {detailFields.map((f, i) => (
-                <div
-                  key={i}
-                  className="flex justify-between items-baseline"
-                  style={{ paddingTop: 11, paddingBottom: 11 }}
-                >
-                  <span className="inline-block text-left text-[13px] text-gray-400 shrink-0" style={{ minWidth: 72 }}>
-                    {f.label}
+            <hr className="my-8 w-full border-gray-100" />
+          )}
+
+          {detailFields.length > 0 && (
+            <div className="flex w-full flex-col gap-6">
+              {detailFields.map((field) => (
+                <div key={field.label} className="flex items-start justify-between gap-4">
+                  <span className="w-20 shrink-0 text-[12px] text-[#94A3B8]">
+                    {field.label}
                   </span>
-                  <span className="text-[13px] text-gray-800 text-right">
-                    {f.value}
+
+                  <span className="break-all text-right text-[13px] leading-relaxed text-[#475569]">
+                    {field.value}
                   </span>
                 </div>
               ))}
             </div>
           )}
 
-          {/* 底部按鈕 */}
-          <div className="flex mt-auto gap-2.5" style={{ paddingTop: 20 }}>
+          <div className="flex-1" />
+
+          {/* 底部操作 */}
+          <div className="mb-4 mt-12 flex w-full gap-4">
             <button
+              type="button"
               onClick={handleAddContact}
-              className="flex flex-1 items-center justify-center gap-1.5 text-[13px] text-gray-500 border border-gray-200 rounded-[10px] bg-transparent cursor-pointer hover:bg-gray-50 transition-colors"
-              style={{ padding: '12px 0' }}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-[#475569] transition-colors hover:bg-gray-50"
             >
-              <UserPlus size={16} strokeWidth={1.5} />
-              加入聯絡人
+              <UserPlus size={18} strokeWidth={1.5} />
+              <span className="text-[13px] tracking-wider">加入聯絡人</span>
             </button>
-            <button
-              className="flex flex-1 items-center justify-center gap-1.5 text-[13px] text-gray-500 border border-gray-200 rounded-[10px] bg-transparent cursor-pointer hover:bg-gray-50 transition-colors"
-              style={{ padding: '12px 0' }}
+
+            <Link
+              to={`/card/${data.slug}/share`}
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-[#475569] transition-colors hover:bg-gray-50"
             >
-              <Share2 size={16} strokeWidth={1.5} />
-              分享名片
-            </button>
+              <Share2 size={18} strokeWidth={1.5} />
+              <span className="text-[13px] tracking-wider">分享名片</span>
+            </Link>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   )
 }
