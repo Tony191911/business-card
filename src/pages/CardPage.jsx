@@ -1,6 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import { Share2, Smartphone, UserCircle, UserPlus } from 'lucide-react'
 import { mockCards } from '../config/mockCards'
+import Wrapper from '../assets/wrappers/PublicPages'
+import PublicActionBtn from '../components/PublicActionBtn'
+import NotFound from '../components/NotFound'
 
 function CardPage() {
   const { slug } = useParams()
@@ -10,11 +13,7 @@ function CardPage() {
   )
 
   if (!data) {
-    return (
-      <div className="flex min-h-screen items-center justify-center text-gray-500">
-        找不到這張電子名片
-      </div>
-    )
+    return <NotFound />
   }
 
   const sortedServices = [...(data.services || [])].sort(
@@ -62,7 +61,7 @@ function CardPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full justify-center bg-white text-[#1E293B] lg:items-center lg:bg-[#f0f0f0] lg:py-10">
+    <Wrapper>
       <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-white lg:min-h-[760px] lg:max-w-[430px] lg:rounded-2xl lg:shadow-2xl">
         {/* 上半部：身份資訊 */}
         <section className="flex w-full flex-col items-center bg-[#F5F3EE] px-6 pb-12 pt-20 text-center">
@@ -171,26 +170,26 @@ function CardPage() {
 
           {/* 底部操作 */}
           <div className="mb-4 mt-12 flex w-full gap-4">
-            <button
+            <PublicActionBtn
               type="button"
               onClick={handleAddContact}
               className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-[#475569] transition-colors hover:bg-gray-50"
             >
               <UserPlus size={18} strokeWidth={1.5} />
               <span className="text-[13px] tracking-wider">加入聯絡人</span>
-            </button>
+            </PublicActionBtn>
 
-            <Link
+            <PublicActionBtn
               to={`/card/${data.slug}/share`}
               className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 py-3 text-[#475569] transition-colors hover:bg-gray-50"
             >
               <Share2 size={18} strokeWidth={1.5} />
               <span className="text-[13px] tracking-wider">分享名片</span>
-            </Link>
+            </PublicActionBtn>
           </div>
         </section>
       </main>
-    </div>
+    </Wrapper>
   )
 }
 

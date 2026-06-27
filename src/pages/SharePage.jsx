@@ -2,6 +2,9 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Download, Link as LinkIcon, UserCircle } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { mockCards } from '../config/mockCards'
+import Wrapper from '../assets/wrappers/PublicPages'
+import PublicActionBtn from '../components/PublicActionBtn'
+import NotFound from '../components/NotFound'
 
 function SharePage() {
   const { slug } = useParams()
@@ -11,11 +14,7 @@ function SharePage() {
   )
 
   if (!data) {
-    return (
-      <div className="flex min-h-screen items-center justify-center text-gray-500">
-        找不到這張電子名片
-      </div>
-    )
+    return <NotFound />
   }
 
   const baseUrl =
@@ -45,7 +44,7 @@ function SharePage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-[#f0f0f0] text-[#1A2B3C] lg:py-8">
+    <Wrapper>
       <main className="relative flex min-h-screen w-full flex-col bg-[#f5f3f0] px-5 pb-16 lg:min-h-[720px] lg:max-w-[430px] lg:rounded-3xl lg:shadow-xl">
         {/* top bar */}
         <header className="flex w-full items-center pb-4 pt-8">
@@ -108,14 +107,14 @@ function SharePage() {
           </section>
 
           {/* download */}
-          <button
+          <PublicActionBtn
             type="button"
             onClick={downloadQRCode}
             className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E0E4E8] bg-transparent py-4 text-[15px] font-semibold transition-colors hover:bg-gray-50"
           >
             <Download size={18} strokeWidth={1.8} />
             下載 QR Code
-          </button>
+          </PublicActionBtn>
 
           {/* url */}
           <button
@@ -135,7 +134,7 @@ function SharePage() {
           </p>
         </div>
       </main>
-    </div>
+    </Wrapper>
   )
 }
 
