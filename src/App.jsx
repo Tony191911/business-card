@@ -10,6 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<AdminPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/cards/new" element={<CardFormPage />} />
         <Route path="/admin/cards/:id/edit" element={<CardFormPage />} />

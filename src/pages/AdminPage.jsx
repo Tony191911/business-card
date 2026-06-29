@@ -1,21 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  Building2,
-  Contact,
-  Copy,
-  Edit,
-  Eye,
-  MoreVertical,
-  Plus,
-  QrCode,
-  RotateCcw,
-  Search,
-  Settings,
-  Trash2,
-  UserCircle,
-} from 'lucide-react'
+import { Building2, Copy, Edit, Eye, MoreVertical, Plus, QrCode, 
+         RotateCcw, Search, Trash2, UserCircle,} from 'lucide-react'
 import { mockCards } from '../config/mockCards'
+import AdminSidebar from '../components/Admin/AdminSidebar'
+import AdminLayout from '../components/Admin/AdminLayout'
+
 
 function AdminPage() {
   const [statusFilter, setStatusFilter] = useState('all')
@@ -55,131 +45,92 @@ function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#1A2B3C]">
-      <div className="flex min-h-screen">
-        {/* Side Nav */}
-        <aside className="hidden w-64 shrink-0 border-r border-[#E0E4E8] bg-white px-4 py-6 md:block">
-          <div className="mb-16 flex items-center gap-3 px-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#041627] text-xl font-bold text-white">
-              D
-            </div>
+    <AdminLayout>
+      {/* Top Bar */}
+      <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#E0E4E8] bg-white px-6 py-3">
+        <div className="flex w-full max-w-[380px] items-center rounded-full border border-[#E0E4E8] bg-[#f3f4f5] px-4 py-2 focus-within:border-[#041627] focus-within:ring-2 focus-within:ring-[#041627]/10">
+          <Search size={20} className="mr-2 text-[#677489]" />
 
-            <div>
-              <h1 className="text-xl font-semibold text-[#041627]">
-                DigiCard Admin
-              </h1>
-              <p className="mt-1 text-sm text-[#677489]">電子名片管理</p>
-            </div>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder="搜尋姓名、公司或網址代稱..."
+            className="w-full border-none bg-transparent p-0 text-sm text-[#1A2B3C] outline-none placeholder:text-[#677489] focus:ring-0"
+          />
+        </div>
+      </header>
+
+      {/* Page Content */}
+      <section className="mx-auto w-full max-w-[1200px] flex-1 px-6 py-10">
+        <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-xl font-semibold text-[#041627]">
+              電子名片管理
+            </h2>
+            <p className="mt-2 text-sm text-[#677489]">
+              管理已建立的電子名片，快速編輯、預覽與分享。
+            </p>
           </div>
 
-          <nav className="space-y-2">
-            <Link
-              to="/admin"
-              className="flex items-center gap-3 rounded-r-full border-r-4 border-[#041627] bg-[#f3f4f5] px-4 py-3 text-sm font-semibold text-[#041627]"
-            >
-              <Contact size={20} />
-              名片管理
-            </Link>
+          <Link
+            to="/admin/cards/new"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#041627] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#1a2b3c] md:w-auto"
+          >
+            <Plus size={18} className="text-white" />
+            <span className="text-white">新增名片</span>
+          </Link>
+        </div>
 
-            <button
-              type="button"
-              className="flex w-full items-center gap-3 rounded-r-full border-r-4 border-transparent px-4 py-3 text-sm font-semibold text-[#677489] hover:bg-[#f3f4f5]"
-            >
-              <Settings size={20} />
-              系統設定
-            </button>
-          </nav>
-        </aside>
+        {/* Filters */}
+        <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
+          <FilterButton
+            active={statusFilter === 'all'}
+            onClick={() => setStatusFilter('all')}
+          >
+            全部 ({counts.all})
+          </FilterButton>
 
-        {/* Main */}
-        <main className="flex min-h-screen flex-1 flex-col">
-          {/* Top Bar */}
-          <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#E0E4E8] bg-white px-6 py-3">
-            <div className="flex w-full max-w-[380px] items-center rounded-full border border-[#E0E4E8] bg-[#f3f4f5] px-4 py-2 focus-within:border-[#041627] focus-within:ring-2 focus-within:ring-[#041627]/10">
-              <Search size={20} className="mr-2 text-[#677489]" />
+          <FilterButton
+            active={statusFilter === 'published'}
+            onClick={() => setStatusFilter('published')}
+          >
+            已發布 ({counts.published})
+          </FilterButton>
 
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="搜尋姓名、公司或網址代稱..."
-                className="w-full border-none bg-transparent p-0 text-sm text-[#1A2B3C] outline-none placeholder:text-[#677489] focus:ring-0"
+          <FilterButton
+            active={statusFilter === 'draft'}
+            onClick={() => setStatusFilter('draft')}
+          >
+            草稿 ({counts.draft})
+          </FilterButton>
+
+          <FilterButton
+            active={statusFilter === 'archived'}
+            onClick={() => setStatusFilter('archived')}
+          >
+            封存 ({counts.archived})
+          </FilterButton>
+        </div>
+
+        {/* Card List */}
+        {filteredCards.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredCards.map((card) => (
+              <AdminCard
+                key={card.id}
+                card={card}
+                onCopyLink={() => copyCardLink(card)}
               />
-            </div>
-          </header>
-
-          {/* Page Content */}
-          <section className="mx-auto w-full max-w-[1200px] flex-1 px-6 py-10">
-            <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-              <div>
-                <h2 className="text-xl font-semibold text-[#041627]">
-                  電子名片管理
-                </h2>
-                <p className="mt-2 text-sm text-[#677489]">
-                  管理已建立的電子名片，快速編輯、預覽與分享。
-                </p>
-              </div>
-
-              <Link
-                to="/admin/cards/new"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#041627] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#1a2b3c] md:w-auto"
-              >
-                <Plus size={18} className="text-white" />
-                <span className="text-white">新增名片</span>
-              </Link>
-            </div>
-
-            {/* Filters */}
-            <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
-              <FilterButton
-                active={statusFilter === 'all'}
-                onClick={() => setStatusFilter('all')}
-              >
-                全部 ({counts.all})
-              </FilterButton>
-
-              <FilterButton
-                active={statusFilter === 'published'}
-                onClick={() => setStatusFilter('published')}
-              >
-                已發布 ({counts.published})
-              </FilterButton>
-
-              <FilterButton
-                active={statusFilter === 'draft'}
-                onClick={() => setStatusFilter('draft')}
-              >
-                草稿 ({counts.draft})
-              </FilterButton>
-
-              <FilterButton
-                active={statusFilter === 'archived'}
-                onClick={() => setStatusFilter('archived')}
-              >
-                封存 ({counts.archived})
-              </FilterButton>
-            </div>
-
-            {/* Card List */}
-            {filteredCards.length > 0 ? (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {filteredCards.map((card) => (
-                  <AdminCard
-                    key={card.id}
-                    card={card}
-                    onCopyLink={() => copyCardLink(card)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-[#E0E4E8] bg-white px-8 py-12 text-center">
-                <p className="text-sm text-[#677489]">沒有符合條件的名片。</p>
-              </div>
-            )}
-          </section>
-        </main>
-      </div>
-    </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-[#E0E4E8] bg-white px-8 py-12 text-center">
+            <p className="text-sm text-[#677489]">沒有符合條件的名片。</p>
+          </div>
+        )}
+      </section>
+    </AdminLayout>
   )
 }
 
@@ -201,7 +152,6 @@ function FilterButton({ active, children, onClick }) {
 
 function AdminCard({ card, onCopyLink }) {
   const isPublished = card.status === 'published'
-  const isDraft = card.status === 'draft'
   const isArchived = card.status === 'archived'
 
   return (
