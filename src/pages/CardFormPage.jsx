@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Badge, BriefcaseBusiness, Building2, Camera, Contact, 
-         Eye, Link as LinkIcon, Plus, Trash2, } from 'lucide-react'
+import { Badge, BriefcaseBusiness, Building2, Camera, Contact, Eye, Link as LinkIcon } from 'lucide-react'
 import { mockCards } from '../config/mockCards'
 import CardNotFound from '../components/NotFound'
-import AdminSidebar from '../components/Admin/AdminSidebar'
 import AdminHeader from '../components/Admin/AdminHeader'
 import AdminLayout from '../components/Admin/AdminLayout'
+import FormField from '../components/CardForm/FormField'
+import UploadBox from '../components/CardForm/UploadBox'
+import IndustryOption from '../components/CardForm/IndustryOption'
+import ServiceFields from '../components/CardForm/ServiceFields'
 
 const emptyCard = {
   id: '',
@@ -121,7 +123,7 @@ function CardFormPage() {
       />
 
       {/* Form */}
-      <div className="mx-auto w-full max-w-[1200px] flex-1 px-6 pb-32 pt-8">
+      <div className="mx-auto w-full max-w-300 flex-1 px-6 pb-32 pt-8">
         <form className="grid grid-cols-1 items-start gap-6 xl:grid-cols-12">
           {/* Left Column */}
           <div className="flex flex-col gap-6 xl:col-span-8">
@@ -148,28 +150,28 @@ function CardFormPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <TextField
+                <FormField
                   label="姓名 (Name) *"
                   placeholder="請輸入姓名"
                   value={formData.name}
                   onChange={(value) => updateField('name', value)}
                 />
 
-                <TextField
+                <FormField
                   label="公司名稱 (Company) *"
                   placeholder="請輸入公司名稱"
                   value={formData.company}
                   onChange={(value) => updateField('company', value)}
                 />
 
-                <TextField
+                <FormField
                   label="公司英文名 (Company English Name)"
                   placeholder="請輸入公司英文名"
                   value={formData.companyEn}
                   onChange={(value) => updateField('companyEn', value)}
                 />
 
-                <TextField
+                <FormField
                   label="職稱 (Title) *"
                   placeholder="例如：室內設計師"
                   value={formData.title}
@@ -186,35 +188,35 @@ function CardFormPage() {
               </h3>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <TextField
+                <FormField
                   label="手機號碼 (Mobile)"
                   placeholder="0900-000-000"
                   value={formData.mobile}
                   onChange={(value) => updateField('mobile', value)}
                 />
 
-                <TextField
+                <FormField
                   label="電子信箱 (Email)"
                   placeholder="example@company.com"
                   value={formData.email}
                   onChange={(value) => updateField('email', value)}
                 />
 
-                <TextField
+                <FormField
                   label="公司電話 (Phone)"
                   placeholder="02-1234-5678"
                   value={formData.officePhone}
                   onChange={(value) => updateField('officePhone', value)}
                 />
 
-                <TextField
+                <FormField
                   label="傳真 (Fax)"
                   placeholder="02-1234-5679"
                   value={formData.fax}
                   onChange={(value) => updateField('fax', value)}
                 />
 
-                <TextField
+                <FormField
                   label="公司地址 (Address)"
                   placeholder="請輸入完整地址"
                   value={formData.address}
@@ -222,7 +224,7 @@ function CardFormPage() {
                   full
                 />
 
-                <TextField
+                <FormField
                   label="官方網站 (Website)"
                   placeholder="https://www.company.com"
                   value={formData.website}
@@ -241,51 +243,19 @@ function CardFormPage() {
                 </h3>
 
                 <div className="space-y-6">
-                  <TextField
+                  <FormField
                     label="統一編號"
                     placeholder="請輸入統一編號"
                     value={formData.taxId}
                     onChange={(value) => updateField('taxId', value)}
                   />
 
-                  <div>
-                    <label className="mb-2 block text-xs font-semibold tracking-wider text-[#44474c]">
-                      服務項目
-                    </label>
-
-                    <div className="mb-3 flex flex-col gap-3">
-                      {formData.services.map((service) => (
-                        <div key={service.id} className="flex items-center gap-3">
-                          <input
-                            type="text"
-                            value={service.serviceName}
-                            onChange={(event) =>
-                              updateService(service.id, event.target.value)
-                            }
-                            placeholder="請輸入服務項目"
-                            className="h-11 flex-1 rounded-lg border border-[#E0E4E8] bg-white px-3 text-sm outline-none transition-all placeholder:text-gray-300 focus:border-[#041627] focus:ring-2 focus:ring-[#041627]/10"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={() => removeService(service.id)}
-                            className="flex h-11 w-11 items-center justify-center text-gray-400 transition-colors hover:text-red-500"
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={addService}
-                      className="flex items-center gap-2 text-sm font-semibold text-[#041627] hover:text-[#1a2b3c]"
-                    >
-                      <Plus size={18} />
-                      新增服務項目
-                    </button>
-                  </div>
+                  <ServiceFields
+                    services={formData.services}
+                    onAddService={addService}
+                    onUpdateService={updateService}
+                    onRemoveService={removeService}
+                  />
                 </div>
               </section>
             )}
@@ -366,7 +336,7 @@ function CardFormPage() {
 
       {/* Bottom Action Bar */}
       <div className="fixed bottom-0 right-0 z-30 w-full border-t border-[#E0E4E8] bg-white p-6 shadow-[0px_-4px_12px_rgba(26,43,60,0.02)] lg:w-[calc(100%-16rem)]">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-3">
+        <div className="mx-auto flex max-w-300 items-center justify-between gap-3">
           <Link
             to="/admin"
             className="rounded-lg border border-[#E0E4E8] px-6 py-3 text-sm font-semibold text-[#44474c] transition-colors hover:bg-[#f3f4f5]"
@@ -403,73 +373,6 @@ function CardFormPage() {
         </div>
       </div>
     </AdminLayout>
-  )
-}
-
-function UploadBox({ label, icon, description, square = false }) {
-  return (
-    <div className={square ? 'w-full md:w-32 md:shrink-0' : 'flex-1'}>
-      <label className="mb-3 block text-xs font-semibold tracking-wider text-[#44474c]">
-        {label}
-      </label>
-
-      <button
-        type="button"
-        className={`flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#E0E4E8] bg-white p-3 text-[#74777d] transition-colors hover:border-[#041627] hover:bg-[#f3f4f5] ${
-          square ? 'aspect-square md:h-32 md:w-32' : 'h-32'
-        }`}
-      >
-        {icon}
-        <span className="mt-2 text-center text-xs leading-relaxed">
-          {description}
-        </span>
-      </button>
-    </div>
-  )
-}
-
-function TextField({ label, value, onChange, placeholder, full = false }) {
-  return (
-    <div className={full ? 'md:col-span-2' : ''}>
-      <label className="mb-2 block text-xs font-semibold tracking-wider text-[#44474c]">
-        {label}
-      </label>
-
-      <input
-        type="text"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        className="h-11 w-full rounded-lg border border-[#E0E4E8] bg-white px-3 text-sm outline-none transition-all placeholder:text-gray-300 focus:border-[#041627] focus:ring-2 focus:ring-[#041627]/10"
-      />
-    </div>
-  )
-}
-
-function IndustryOption({ checked, title, description, onClick }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`relative flex w-full items-start gap-3 rounded-lg border p-3 text-left transition-colors ${
-        checked
-          ? 'border-[#041627] bg-[#041627]/5'
-          : 'border-[#E0E4E8] hover:border-[#041627]/50 hover:bg-[#f3f4f5]'
-      }`}
-    >
-      <span
-        className={`mt-1 h-4 w-4 rounded-full border ${
-          checked ? 'border-[#041627] bg-[#041627]' : 'border-[#E0E4E8]'
-        }`}
-      />
-
-      <span className="flex flex-col">
-        <span className="text-sm font-semibold text-[#041627]">{title}</span>
-        <span className="mt-1 text-sm leading-relaxed text-[#44474c]">
-          {description}
-        </span>
-      </span>
-    </button>
   )
 }
 
