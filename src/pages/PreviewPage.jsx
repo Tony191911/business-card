@@ -1,13 +1,6 @@
-import { Link, useParams } from 'react-router-dom'
-import {
-  Copy,
-  Edit,
-  Eye,
-  Info,
-  Save,
-  Upload,
-} from 'lucide-react'
-import { mockCards } from '../config/mockCards'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Copy, Edit, Eye, Info, Save, Upload, } from 'lucide-react'
+import { getCardById, saveCard } from '../services/cardService'
 import CardContent from '../components/CardContent'
 import NotFound from '../components/NotFound'
 import AdminHeader from '../components/Admin/AdminHeader'
@@ -15,9 +8,8 @@ import AdminLayout from '../components/Admin/AdminLayout'
 
 function PreviewPage() {
   const { id } = useParams()
-
-  const data = mockCards.find((card) => card.id === id)
-
+  const data = getCardById(id)
+  const navigate = useNavigate()
   if (!data) {
     return <NotFound />
   }
@@ -30,11 +22,25 @@ function PreviewPage() {
   }
 
   function handlePublish() {
-    alert('之後接資料庫時，這裡會把狀態改成 published')
+    const nextCard = {
+      ...data,
+      status: 'published',
+    }
+
+    saveCard(nextCard)
+    alert('已發布名片')
+    navigate('/admin')
   }
 
   function handleSaveDraft() {
-    alert('之後接資料庫時，這裡會儲存草稿')
+    const nextCard = {
+      ...data,
+      status: 'draft',
+    }
+
+    saveCard(nextCard)
+    alert('已儲存草稿')
+    navigate('/admin')
   }
 
   function handlePreviewAddContact() {
@@ -51,8 +57,8 @@ function PreviewPage() {
         subtitle={`/card/${data.slug}`}
       />
       {/* Phone Preview */}
-      <section className="w-full max-w-[400px] shrink-0">
-        <div className="relative flex aspect-[9/19] flex-col overflow-hidden rounded-[2.5rem] border-[8px] border-[#e1e3e4] bg-white shadow-[0px_24px_48px_-12px_rgba(26,43,60,0.15)]">
+      <section className="w-full max-w-100 shrink-0">
+        <div className="relative flex aspect-9/19 flex-col overflow-hidden rounded-[2.5rem] border-8 border-[#e1e3e4] bg-white shadow-[0px_24px_48px_-12px_rgba(26,43,60,0.15)]">
           {/* notch */}
           <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex h-7 justify-center">
             <div className="h-6 w-32 rounded-b-xl bg-[#e1e3e4] opacity-50" />
@@ -69,7 +75,7 @@ function PreviewPage() {
       </section>
 
       {/* Action Panel */}
-      <aside className="flex w-full max-w-[400px] flex-col gap-6 lg:sticky lg:top-24">
+      <aside className="flex w-full max-w-100 flex-col gap-6 lg:sticky lg:top-24">
         {/* Primary Actions */}
         <section className="rounded-2xl border border-[#E0E4E8] bg-white p-6 shadow-[0px_4px_12px_rgba(26,43,60,0.05)]">
           <h2 className="mb-5 text-xl font-semibold text-[#041627]">

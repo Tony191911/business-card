@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Badge, BriefcaseBusiness, Building2, Camera, Contact, Eye, Link as LinkIcon } from 'lucide-react'
-import { mockCards } from '../config/mockCards'
+import { getCardById, saveCard } from '../services/cardService'
 import CardNotFound from '../components/NotFound'
 import AdminHeader from '../components/Admin/AdminHeader'
 import AdminLayout from '../components/Admin/AdminLayout'
@@ -43,10 +43,13 @@ function CardFormPage() {
   const isEditMode = Boolean(id)
 
   const initialCard = useMemo(() => {
-    if (!isEditMode) return emptyCard
-
-    const foundCard = mockCards.find((card) => card.id === id)
-    return foundCard || null
+    if (!isEditMode) {
+      return {
+        ...emptyCard,
+        id: crypto.randomUUID(),
+      }
+    }
+    return getCardById(id) || null
   }, [id, isEditMode])
 
   const [formData, setFormData] = useState(initialCard || emptyCard)
@@ -97,20 +100,50 @@ function CardFormPage() {
   }
 
   function handleSaveDraft() {
-    alert('之後接資料庫時，這裡會儲存草稿')
+    const nextCard = {
+      ...formData,
+      status: 'draft',
+    }
+
+    saveCard(nextCard)
+    alert('已儲存草稿')
+    navigate('/admin')
   }
 
   function handlePublish() {
-    alert('之後接資料庫時，這裡會發布名片')
-  }
-
-  function handlePreview() {
-    if (isEditMode) {
-      navigate(`/admin/cards/${formData.id}/preview`)
+    if (!formData.name.trim()) {
+      alert('請輸入姓名')
       return
     }
 
-    alert('新增模式下，之後會先建立草稿，再導到預覽頁')
+    if (!formData.company.trim()) {
+      alert('請輸入公司名稱')
+      return
+    }
+
+    if (!formData.slug.trim()) {
+      alert('請輸入網址代稱')
+      return
+    }
+
+    const nextCard = {
+      ...formData,
+      status: 'published',
+    }
+
+    saveCard(nextCard)
+    alert('已發布名片')
+    navigate(`/admin/cards/${nextCard.id}/preview`)
+  }
+
+  function handlePreview() {
+    const nextCard = {
+      ...formData,
+      status: formData.status || 'draft',
+    }
+
+    saveCard(nextCard)
+    navigate(`/admin/cards/${nextCard.id}/preview`)
   }
 
   return (

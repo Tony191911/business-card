@@ -1,19 +1,9 @@
-// src/components/CardItem.jsx
-import {
-  Building2,
-  Copy,
-  Edit,
-  Eye,
-  MoreVertical,
-  QrCode,
-  RotateCcw,
-  Trash2,
-  UserCircle,
-} from 'lucide-react'
+import { Building2, Copy, Edit, Eye, MoreVertical, QrCode,
+         RotateCcw, Trash2, UserCircle, } from 'lucide-react'
 import StatusBadge from './StatusBadge'
 import IconButton from './IconButton'
 
-function CardItem({ card, onCopyLink }) {
+function CardItem({ card, onCopyLink, onArchive, onRestore, onDelete, }) {
   const isPublished = card.status === 'published'
   const isArchived = card.status === 'archived'
 
@@ -112,27 +102,17 @@ function CardItem({ card, onCopyLink }) {
               </IconButton>
             </div>
 
-            <IconButton
-              title="更多操作"
-              onClick={() => alert('之後可加入封存功能')}
-            >
+            <IconButton title="封存" onClick={onArchive}>
               <MoreVertical size={20} />
             </IconButton>
           </>
         ) : (
           <>
-            <IconButton
-              title="還原"
-              onClick={() => alert('之後可加入還原功能')}
-            >
+            <IconButton title="還原" onClick={onRestore}>
               <RotateCcw size={20} />
             </IconButton>
 
-            <IconButton
-              title="刪除"
-              onClick={() => alert('之後可加入刪除功能')}
-              danger
-            >
+            <IconButton title="刪除" onClick={onDelete} danger>
               <Trash2 size={20} />
             </IconButton>
           </>

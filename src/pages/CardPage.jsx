@@ -1,15 +1,12 @@
 import { useParams } from 'react-router-dom'
-import { mockCards } from '../config/mockCards'
+import { getCardBySlug } from '../services/cardService'
 import Wrapper from '../assets/wrappers/PublicPages'
 import NotFound from '../components/NotFound'
 import CardContent from '../components/CardContent'
 
 function CardPage() {
   const { slug } = useParams()
-
-  const data = mockCards.find(
-    (card) => card.slug === slug && card.status === 'published'
-  )
+  const data = getCardBySlug(slug)
 
   if (!data) {
     return <NotFound />
@@ -48,7 +45,7 @@ function CardPage() {
 
   return (
     <Wrapper>
-      <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-white lg:min-h-[760px] lg:max-w-[430px] lg:rounded-2xl lg:shadow-2xl">
+      <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-white lg:min-h-190 lg:max-w-107.5 lg:rounded-2xl lg:shadow-2xl">
         <CardContent data={data} onAddContact={handleAddContact} />
       </main>
     </Wrapper>

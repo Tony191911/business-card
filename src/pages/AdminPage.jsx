@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus, Search, } from 'lucide-react'
-import { getCards } from '../utils/cardStorage'
+import { getCards,  updateCardStatus,  deleteCard, } from '../services/cardService'
 import AdminLayout from '../components/Admin/AdminLayout'
 import CardItem from '../components/Admin/CardItem'
 
@@ -47,6 +47,29 @@ function AdminPage() {
       console.error(error)
       alert('複製失敗，請手動複製連結')
     }
+  }
+
+  function refreshCards() {
+    setCards(getCards())
+  }
+
+  function handleArchiveCard(cardId) {
+    updateCardStatus(cardId, 'archived')
+    refreshCards()
+  }
+
+  function handleRestoreCard(cardId) {
+    updateCardStatus(cardId, 'draft')
+    refreshCards()
+  }
+
+  function handleDeleteCard(cardId) {
+    const confirmed = window.confirm('確定要刪除這張名片嗎？')
+
+    if (!confirmed) return
+
+    deleteCard(cardId)
+    refreshCards()
   }
 
   return (
@@ -126,6 +149,10 @@ function AdminPage() {
                 key={card.id}
                 card={card}
                 onCopyLink={() => copyCardLink(card)}
+                onCopyLink={() => copyCardLink(card)}
+                onArchive={() => handleArchiveCard(card.id)}
+                onRestore={() => handleRestoreCard(card.id)}
+                onDelete={() => handleDeleteCard(card.id)}
               />
             ))}
           </div>
