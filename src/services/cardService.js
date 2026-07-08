@@ -1,57 +1,53 @@
-import { mockCards } from '../config/mockCards'
+// src/services/cardService.js
+import { supabase } from '../lib/supabaseClient'
+import { mapCardFromDb } from './cardMapper'
 
-const STORAGE_KEY = 'business-card-data'
+const cardSelect = `
+  *,
+  card_services (
+    id,
+    service_name,
+    sort_order
+  )
+`
 
-export function getCards() {
-  const savedCards = localStorage.getItem(STORAGE_KEY)
+export async function getCards() {
+  const { data, error } = await supabase
+    .from('cards')
+    .select(cardSelect)
+    .order('created_at', { ascending: false })
 
-  if (!savedCards) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(mockCards))
-    return mockCards
+  if (error) {
+    throw error
   }
 
-  return JSON.parse(savedCards)
+  return data.map(mapCardFromDb)
 }
 
-export function getCardById(id) {
-  return getCards().find((card) => card.id === id)
+export async function getCardById(id) {
+  const { data, error } = await supabase
+    .from('cards')
+    .select(cardSelect)
+    .eq('id', id)
+    .single()
+
+  if (error) {
+    throw error
+  }
+
+  return mapCardFromDb(data)
 }
 
-export function getCardBySlug(slug) {
-  return getCards().find((card) => card.slug === slug)
-}
+export async function getCardBySlug(slug) {
+  const { data, error } = await supabase
+    .from('cards')
+    .select(cardSelect)
+    .eq('slug', slug)
+    .single()
 
-export function saveCard(card) {
-  const cards = getCards()
-  const exists = cards.some((item) => item.id === card.id)
+  if (error) {
+    throw error
+  }
 
-  const nextCards = exists
-    ? cards.map((item) => (item.id === card.id ? card : item))
-    : [...cards, card]
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(nextCards))
-
-  return card
-}
-
-export function updateCardStatus(id, status) {
-  const cards = getCards()
-
-  const nextCards = cards.map((card) =>
-    card.id === id
-      ? {
-          ...card,
-          status,
-        }
-      : card
-  )
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(nextCards))
-}
-
-export function deleteCard(id) {
-  const cards = getCards()
-  const nextCards = cards.filter((card) => card.id !== id)
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(nextCards))
+  return mapCardFromDb(data)
 }
