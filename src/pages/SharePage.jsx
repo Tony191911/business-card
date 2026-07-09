@@ -1,27 +1,59 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { getPublishedCardBySlug } from '../services/cardService'
 import { ArrowLeft, Download, Link as LinkIcon, UserCircle } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
-import { mockCards } from '../config/mockCards'
-import Wrapper from '../assets/wrappers/PublicPages'
+import Wrapper from '../assets/wrappers/PublicPage'
 import PublicActionBtn from '../components/PublicActionBtn'
 import NotFound from '../components/NotFound'
 
 function SharePage() {
   const { slug } = useParams()
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const data = mockCards.find(
-    (card) => card.slug === slug && card.status === 'published'
-  )
+  useEffect(() => {
+    async function loadCard() {
+      try {
+        setIsLoading(true)
+        setErrorMessage('')
+        const card = await getPublishedCardBySlug(slug)
+        if (!card) {
+          setErrorMessage('找不到名片')
+          return
+        }
+        setData(card)
+      } catch (error) {
+        console.error(error)
+        setErrorMessage('讀取名片失敗')
+      } finally {
+        setIsLoading(false)
+      }
+    }
 
-  if (!data) {
+    loadCard()
+  }, [slug])
+
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <div className="flex min-h-screen items-center justify-center">
+          <p className="text-sm text-gray-500">名片讀取中...</p>
+        </div>
+      </Wrapper>
+    )
+  }
+
+  if (errorMessage || !data) {
     return <NotFound />
   }
 
-  const baseUrl =
-  window.location.hostname === 'localhost'? 'http://192.168.68.53:5173' : window.location.origin
-  const cardUrl = `${baseUrl}/card/${data.slug}`
+  // const baseUrl =
+  // window.location.hostname === 'localhost'? 'http://192.168.68.53:5173' : window.location.origin
+  // const cardUrl = `${baseUrl}/card/${data.slug}`
 
-  // const cardUrl = `${window.location.origin}/card/${data.slug}`
+  const cardUrl = `${window.location.origin}/card/${data.slug}`
 
   async function copyLink() {
     await navigator.clipboard.writeText(cardUrl)
@@ -45,7 +77,7 @@ function SharePage() {
 
   return (
     <Wrapper>
-      <main className="relative flex min-h-screen w-full flex-col bg-[#f5f3f0] px-5 pb-16 lg:min-h-[720px] lg:max-w-[430px] lg:rounded-3xl lg:shadow-xl">
+      <main className="relative flex min-h-screen w-full flex-col bg-[#f5f3f0] px-5 pb-16 lg:min-h-180 lg:max-w-107.5 lg:rounded-3xl lg:shadow-xl">
         {/* top bar */}
         <header className="flex w-full items-center pb-4 pt-8">
           <Link
@@ -84,7 +116,7 @@ function SharePage() {
           </div>
 
           {/* QR code card */}
-          <section className="mb-4 flex flex-col items-center rounded-[24px] border border-[#E0E4E8] bg-white p-6 text-center shadow-[0px_4px_16px_rgba(26,43,60,0.03)]">
+          <section className="mb-4 flex flex-col items-center rounded-3xl border border-[#E0E4E8] bg-white p-6 text-center shadow-[0px_4px_16px_rgba(26,43,60,0.03)]">
             <div className="mb-6 flex h-48 w-48 items-center justify-center rounded-xl bg-[#f3f4f5]">
               <QRCodeCanvas
                 id="business-card-qr-code"
@@ -110,9 +142,9 @@ function SharePage() {
           <PublicActionBtn
             type="button"
             onClick={downloadQRCode}
-            className="mb-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#E0E4E8] bg-transparent py-4 text-[15px] font-semibold transition-colors hover:bg-gray-50"
+            icon={<Download size={18} strokeWidth={1.8} />}
+            className="mb-4 w-full rounded-xl border-2 border-[#E0E4E8] bg-transparent py-4 text-[15px] font-semibold transition-colors hover:bg-gray-50"
           >
-            <Download size={18} strokeWidth={1.8} />
             下載 QR Code
           </PublicActionBtn>
 

@@ -87,3 +87,16 @@ export async function saveCard(card) {
 
   return getCardById(cardId)
 }
+
+export async function getPublishedCardBySlug(slug) {
+  const { data, error } = 
+      await supabase.from('cards').select(cardSelect).eq('slug', slug)
+      .eq('status', 'published').maybeSingle()
+  if (error) {
+    throw error
+  }
+  if (!data) {
+    return null
+  }
+  return mapCardFromDb(data)
+}

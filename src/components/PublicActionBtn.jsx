@@ -8,6 +8,7 @@ function PublicActionBtn({
   variant = 'outline',
   size = 'md',
   className = '',
+  ...props
 }) {
   const sizeClass = size === 'lg' ? 'py-4 text-[15px]' : 'py-3 text-[13px]'
 
@@ -23,16 +24,16 @@ function PublicActionBtn({
 
   if (to) {
     return (
-      <Link to={to} className={finalClass}>
-        {icon}
+      <Link to={to} className={finalClass} {...props}>
+        {icon && <span className="flex shrink-0 items-center">{icon}</span>}
         <span>{children}</span>
       </Link>
     )
   }
 
   return (
-    <button type="button" onClick={onClick} className={finalClass}>
-      {icon}
+    <button type="button" onClick={onClick} className={finalClass} {...props}>
+      {icon && <span className="flex shrink-0 items-center">{icon}</span>}
       <span>{children}</span>
     </button>
   )

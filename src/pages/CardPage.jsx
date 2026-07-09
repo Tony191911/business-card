@@ -1,14 +1,49 @@
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getCardBySlug } from '../services/cardService'
-import Wrapper from '../assets/wrappers/PublicPages'
+import { getPublishedCardBySlug  } from '../services/cardService'
+import Wrapper from '../assets/wrappers/PublicPage'
 import NotFound from '../components/NotFound'
 import CardContent from '../components/CardContent'
 
 function CardPage() {
   const { slug } = useParams()
-  const data = getCardBySlug(slug)
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  if (!data) {
+  useEffect(() => {
+    async function loadCard() {
+      try {
+        setIsLoading(true)
+        setErrorMessage('')
+        const card = await getPublishedCardBySlug(slug)
+        if (!card) {
+          setErrorMessage('找不到名片')
+          return
+        }
+        setData(card)
+      } catch (error) {
+        console.error(error)
+        setErrorMessage('讀取名片失敗')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadCard()
+  }, [slug])
+
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <div className="flex min-h-screen items-center justify-center">
+          <p className="text-sm text-gray-500">名片讀取中...</p>
+        </div>
+      </Wrapper>
+    )
+  }
+
+  if (errorMessage || !data) {
     return <NotFound />
   }
 
