@@ -13,9 +13,6 @@ function PreviewPage() {
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
-  if (!data) {
-    return <NotFound />
-  }
 
   useEffect(() => {
     async function loadCard() {
