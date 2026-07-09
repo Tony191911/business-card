@@ -6,7 +6,7 @@ function AdminSidebar() {
     const isCardManagement = location.pathname === '/' || location.pathname.startsWith('/admin')
 
     return (
-        <aside className="hidden w-64 shrink-0 border-r border-[#E0E4E8] bg-white px-4 py-6 md:block">
+        <aside className="admin-sidebar hidden px-4 py-6 md:block">
           <div className="mb-16 flex items-center gap-3 px-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#041627] text-xl font-bold text-white">
               D

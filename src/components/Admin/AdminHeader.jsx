@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 
 function AdminHeader({ title, subtitle, backTo, status, children, }) {
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-[#E0E4E8] bg-white px-6 py-3">
+    <header className="flex items-center justify-between border-b border-[#E0E4E8] bg-white px-6 py-3">
       <div className="flex items-center gap-3">
         {backTo && (
           <Link
