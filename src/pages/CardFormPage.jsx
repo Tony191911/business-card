@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Badge, BriefcaseBusiness, Building2, Camera, Contact, Eye, Link as LinkIcon } from 'lucide-react'
 import { getCardById, saveCard } from '../services/cardService'
-import CardNotFound from '../components/NotFound'
 import AdminHeader from '../components/Admin/AdminHeader'
 import AdminLayout from '../components/Admin/AdminLayout'
 import FormField from '../components/CardForm/FormField'
@@ -36,26 +35,109 @@ const emptyCard = {
   services: [],
 }
 
+const sampleCard = {
+  ...emptyCard,
+  slug: 'cheng-li-design',
+  status: 'draft',
+  industry: 'construction',
+
+  name: '覃慧芬',
+  title: '室內設計師',
+  company: '承麗實業有限公司',
+  companyEn: 'Cheng Li Co., Ltd.',
+
+  mobile: '0937-721470',
+  officePhone: '',
+  fax: '04-2381-1649',
+  email: 'fen19192005@yahoo.com.tw',
+  address: '408台中市南屯區楓和路676號',
+  taxId: '80433113',
+
+  website: '',
+
+  avatarUrl: '',
+  logoUrl: '',
+
+  services: [
+    {
+      id: crypto.randomUUID(),
+      serviceName: '住宅裝修設計施工',
+      sortOrder: 1,
+    },
+    {
+      id: crypto.randomUUID(),
+      serviceName: '系統櫥櫃設計施工',
+      sortOrder: 2,
+    },
+    {
+      id: crypto.randomUUID(),
+      serviceName: '辦公室設備銷售及規劃施工',
+      sortOrder: 3,
+    },
+  ],
+}
+
+
 function CardFormPage() {
   const { id } = useParams()
   const navigate = useNavigate()
-
   const isEditMode = Boolean(id)
+  const [formData, setFormData] = useState(emptyCard)
+  const [isLoading, setIsLoading] = useState(isEditMode)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const initialCard = useMemo(() => {
-    if (!isEditMode) {
-      return {
-        ...emptyCard,
-        id: crypto.randomUUID(),
+  useEffect(() => {
+    if (!isEditMode) return
+
+    async function loadCard() {
+      try {
+        setIsLoading(true)
+        setErrorMessage('')
+        const card = await getCardById(id)
+        setFormData(card)
+      } catch (error) {
+        console.error(error)
+        setErrorMessage('讀取名片失敗')
+      } finally {
+        setIsLoading(false)
       }
     }
-    return getCardById(id) || null
+
+    loadCard()
   }, [id, isEditMode])
 
-  const [formData, setFormData] = useState(initialCard || emptyCard)
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <AdminHeader
+          title={isEditMode ? '編輯名片' : '新增名片'}
+          backTo="/admin"
+        />
 
-  if (!initialCard) {
-    return <CardNotFound />
+        <div className="mx-auto w-full max-w-300 px-6 py-10">
+          <div className="rounded-2xl border border-[#E0E4E8] bg-white px-8 py-12 text-center">
+            <p className="text-sm text-[#677489]">名片讀取中...</p>
+          </div>
+        </div>
+      </AdminLayout>
+    )
+  }
+
+  if (errorMessage) {
+    return (
+      <AdminLayout>
+        <AdminHeader
+          title={isEditMode ? '編輯名片' : '新增名片'}
+          backTo="/admin"
+        />
+
+        <div className="mx-auto w-full max-w-300 px-6 py-10">
+          <div className="rounded-2xl border border-red-100 bg-red-50 px-8 py-12 text-center">
+            <p className="text-sm text-red-600">{errorMessage}</p>
+          </div>
+        </div>
+      </AdminLayout>
+    )
   }
 
   const isConstruction = formData.industry === 'construction'
@@ -99,18 +181,22 @@ function CardFormPage() {
     }))
   }
 
-  function handleSaveDraft() {
-    const nextCard = {
-      ...formData,
-      status: 'draft',
+  async function handleSaveDraft() {
+    try {
+      const nextCard = {
+        ...formData,
+        status: 'draft',
+      }
+      await saveCard(nextCard)
+      alert('已儲存草稿')
+      navigate('/admin')
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '儲存草稿失敗')
     }
-
-    saveCard(nextCard)
-    alert('已儲存草稿')
-    navigate('/admin')
   }
 
-  function handlePublish() {
+  async function handlePublish() {
     if (!formData.name.trim()) {
       alert('請輸入姓名')
       return
@@ -126,24 +212,39 @@ function CardFormPage() {
       return
     }
 
-    const nextCard = {
-      ...formData,
-      status: 'published',
+    try {
+      const nextCard = {
+        ...formData,
+        status: 'published',
+      }
+      const savedCard = await saveCard(nextCard)
+      alert('已發布名片')
+      navigate(`/admin/cards/${savedCard.id}/preview`)
+    } catch (error) {
+      console.error(error)
+      alert('發布名片失敗')
     }
-
-    saveCard(nextCard)
-    alert('已發布名片')
-    navigate(`/admin/cards/${nextCard.id}/preview`)
   }
 
-  function handlePreview() {
-    const nextCard = {
-      ...formData,
-      status: formData.status || 'draft',
+  async function handlePreview() {
+    try {
+      const nextCard = {
+        ...formData,
+        status: formData.status || 'draft',
+      }
+      const savedCard = await saveCard(nextCard)
+      navigate(`/admin/cards/${savedCard.id}/preview`)
+    } catch (error) {
+      console.error(error);
+      alert('預覽前儲存失敗')
     }
+  }
 
-    saveCard(nextCard)
-    navigate(`/admin/cards/${nextCard.id}/preview`)
+  function fillSampleData() {
+    setFormData({
+      ...sampleCard,
+      id: formData.id || '',
+    })
   }
 
   return (
@@ -378,6 +479,14 @@ function CardFormPage() {
           </Link>
 
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={fillSampleData}
+              className="rounded-lg border border-[#E0E4E8] px-6 py-3 text-sm font-semibold text-[#677489] transition-colors hover:bg-[#f3f4f5]"
+            >
+              填入範例資料
+            </button>
+
             <button
               type="button"
               onClick={handleSaveDraft}

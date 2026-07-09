@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Copy, Edit, Eye, Info, Save, Upload, } from 'lucide-react'
 import { getCardById, saveCard } from '../services/cardService'
@@ -8,10 +9,58 @@ import AdminLayout from '../components/Admin/AdminLayout'
 
 function PreviewPage() {
   const { id } = useParams()
-  const data = getCardById(id)
   const navigate = useNavigate()
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
   if (!data) {
     return <NotFound />
+  }
+
+  useEffect(() => {
+    async function loadCard() {
+      try {
+        setIsLoading(true)
+        setErrorMessage('')
+        const card = await getCardById(id)
+        setData(card)
+      } catch (error) {
+        console.error(error)
+        setErrorMessage('讀取名片失敗')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadCard()
+  }, [id])
+
+  if (isLoading) {
+    return (
+      <AdminLayout>
+        <AdminHeader title="預覽名片" backTo="/admin" />
+        <div className="mx-auto w-full max-w-300 px-6 py-10">
+          <div className="rounded-2xl border border-[#E0E4E8] bg-white px-8 py-12 text-center">
+            <p className="text-sm text-[#677489]">名片讀取中...</p>
+          </div>
+        </div>
+      </AdminLayout>
+    )
+  }
+
+  if (errorMessage || !data) {
+    return (
+      <AdminLayout>
+        <AdminHeader title="預覽名片" backTo="/admin" />
+        <div className="mx-auto w-full max-w-300 px-6 py-10">
+          <div className="rounded-2xl border border-red-100 bg-red-50 px-8 py-12 text-center">
+            <p className="text-sm text-red-600">
+              {errorMessage || '找不到名片'}
+            </p>
+          </div>
+        </div>
+      </AdminLayout>
+    )
   }
 
   const cardUrl = `${window.location.origin}/card/${data.slug}`
@@ -21,26 +70,34 @@ function PreviewPage() {
     alert('已複製公開連結')
   }
 
-  function handlePublish() {
-    const nextCard = {
-      ...data,
-      status: 'published',
+  async function handlePublish() {
+    try {
+      const nextCard = {
+        ...data,
+        status: 'published',
+      }
+      const savedCard = await saveCard(nextCard)
+      setData(savedCard)
+      alert('已發布名片')
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '發布名片失敗')
     }
-
-    saveCard(nextCard)
-    alert('已發布名片')
-    navigate('/admin')
   }
 
-  function handleSaveDraft() {
-    const nextCard = {
-      ...data,
-      status: 'draft',
+  async function handleSaveDraft() {
+    try {
+      const nextCard = {
+        ...data,
+        status: 'draft',
+      }
+      const savedCard = await saveCard(nextCard)
+      setData(savedCard)
+      alert('已儲存草稿')
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '儲存草稿失敗')
     }
-
-    saveCard(nextCard)
-    alert('已儲存草稿')
-    navigate('/admin')
   }
 
   function handlePreviewAddContact() {

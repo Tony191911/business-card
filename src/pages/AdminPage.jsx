@@ -1,15 +1,36 @@
-import { useMemo, useState } from 'react'
+import { useEffect ,useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus, Search, } from 'lucide-react'
-import { getCards,  updateCardStatus,  deleteCard, } from '../services/cardService'
+import { getCards, } from '../services/cardService'
 import AdminLayout from '../components/Admin/AdminLayout'
 import CardItem from '../components/Admin/CardItem'
 
 
 function AdminPage() {
+  const [cards, setCards] = useState([])
   const [statusFilter, setStatusFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
-  const [cards, setCards] = useState(() => getCards())
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  useEffect(() => {
+    async function loadCards() {
+      try {
+        setIsLoading(true)
+        setErrorMessage('')
+
+        const cardsFromDb = await getCards()
+        setCards(cardsFromDb)
+      } catch (error) {
+        console.error(error)
+        setErrorMessage('讀取名片失敗')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadCards()
+  }, [])
 
   const counts = useMemo(() => {
     return {
@@ -22,14 +43,9 @@ function AdminPage() {
 
   const filteredCards = useMemo(() => {
     return cards.filter((card) => {
-      const matchStatus =
-        statusFilter === 'all' ? true : card.status === statusFilter
-
+      const matchStatus = statusFilter === 'all' ? true : card.status === statusFilter
       const keyword = searchTerm.trim().toLowerCase()
-
-      const matchSearch =
-        keyword === ''
-          ? true
+      const matchSearch = keyword === '' ? true
           : [card.name, card.company, card.slug, card.title]
               .filter(Boolean)
               .some((value) => value.toLowerCase().includes(keyword))
@@ -53,23 +69,16 @@ function AdminPage() {
     setCards(getCards())
   }
 
-  function handleArchiveCard(cardId) {
-    updateCardStatus(cardId, 'archived')
-    refreshCards()
+  function handleArchiveCard() {
+    alert('封存功能下一步再接 Supabase')
   }
 
-  function handleRestoreCard(cardId) {
-    updateCardStatus(cardId, 'draft')
-    refreshCards()
+  function handleRestoreCard() {
+    alert('還原功能下一步再接 Supabase')
   }
 
-  function handleDeleteCard(cardId) {
-    const confirmed = window.confirm('確定要刪除這張名片嗎？')
-
-    if (!confirmed) return
-
-    deleteCard(cardId)
-    refreshCards()
+  function handleDeleteCard() {
+    alert('刪除功能下一步再接 Supabase')
   }
 
   return (
@@ -142,13 +151,20 @@ function AdminPage() {
         </div>
 
         {/* Card List */}
-        {filteredCards.length > 0 ? (
+        {isLoading ? (
+          <div className="rounded-2xl border border-[#E0E4E8] bg-white px-8 py-12 text-center">
+            <p className="text-sm text-[#677489]">名片讀取中...</p>
+          </div>
+        ) : errorMessage ? (
+          <div className="rounded-2xl border border-red-100 bg-red-50 px-8 py-12 text-center">
+            <p className="text-sm text-red-600">{errorMessage}</p>
+          </div>
+        ) : filteredCards.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredCards.map((card) => (
               <CardItem
                 key={card.id}
                 card={card}
-                onCopyLink={() => copyCardLink(card)}
                 onCopyLink={() => copyCardLink(card)}
                 onArchive={() => handleArchiveCard(card.id)}
                 onRestore={() => handleRestoreCard(card.id)}
