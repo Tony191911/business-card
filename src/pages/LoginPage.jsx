@@ -1,20 +1,25 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabaseClient'
 
 function LoginPage() {
   const navigate = useNavigate()
-
+  const { session, isAuthLoading } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
+  useEffect(() => {
+    if (!isAuthLoading && session) {
+      navigate('/admin', { replace: true })
+    }
+  }, [session, isAuthLoading, navigate])
+
   async function handleSubmit(event) {
     event.preventDefault()
-
     try {
       setIsLoading(true)
-
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -23,7 +28,7 @@ function LoginPage() {
       if (error) {
         throw error
       }
-
+      
       navigate('/admin')
     } catch (error) {
       console.error(error)
