@@ -8,6 +8,7 @@ import FormField from '../components/CardForm/FormField'
 import UploadBox from '../components/CardForm/UploadBox'
 import IndustryOption from '../components/CardForm/IndustryOption'
 import ServiceFields from '../components/CardForm/ServiceFields'
+import { uploadCardImage } from '../services/storageService'
 
 const emptyCard = {
   id: '',
@@ -85,6 +86,8 @@ function CardFormPage() {
   const [formData, setFormData] = useState(emptyCard)
   const [isLoading, setIsLoading] = useState(isEditMode)
   const [errorMessage, setErrorMessage] = useState('')
+  const [uploadFolder] = useState(() => id || crypto.randomUUID())
+  const [uploadingType, setUploadingType] = useState(null)
 
   useEffect(() => {
     if (!isEditMode) return
@@ -149,6 +152,26 @@ function CardFormPage() {
     }))
   }
 
+  async function handleImageUpload(imageType, file) {
+    try {
+      setUploadingType(imageType)
+      const { url } = await uploadCardImage({
+        file,
+        folderId: uploadFolder,
+        imageType,
+      })
+      updateField(
+        imageType === 'avatar' ? 'avatarUrl' : 'logoUrl',
+        url
+      )
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '圖片上傳失敗')
+    } finally {
+      setUploadingType(null)
+    }
+  }
+
   function updateService(serviceId, value) {
     setFormData((prev) => ({
       ...prev,
@@ -201,17 +224,14 @@ function CardFormPage() {
       alert('請輸入姓名')
       return
     }
-
     if (!formData.company.trim()) {
       alert('請輸入公司名稱')
       return
     }
-
     if (!formData.slug.trim()) {
       alert('請輸入網址代稱')
       return
     }
-
     try {
       const nextCard = {
         ...formData,
@@ -274,12 +294,18 @@ function CardFormPage() {
                   icon={<Camera size={26} />}
                   description="點擊上傳"
                   square
+                  imageUrl={formData.avatarUrl}
+                  uploading={uploadingType === 'avatar'}
+                  onFileSelect={(file) => handleImageUpload('avatar', file)}
                 />
 
                 <UploadBox
                   label="公司商標 (Logo)"
                   icon={<Building2 size={26} />}
                   description="點擊上傳公司 Logo（建議橫式）"
+                  imageUrl={formData.logoUrl}
+                  uploading={uploadingType === 'logo'}
+                  onFileSelect={(file) => handleImageUpload('logo', file)}
                 />
               </div>
 
