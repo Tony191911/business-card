@@ -1,4 +1,4 @@
-import { Building2, Copy, Edit, Eye, MoreVertical, QrCode,
+import { Archive, Building2, Copy, Edit, Eye, QrCode, 
          RotateCcw, Trash2, UserCircle, } from 'lucide-react'
 import StatusBadge from './StatusBadge'
 import IconButton from './IconButton'
@@ -103,7 +103,7 @@ function CardItem({ card, onCopyLink, onArchive, onRestore, onDelete, }) {
             </div>
 
             <IconButton title="封存" onClick={onArchive}>
-              <MoreVertical size={20} />
+              <Archive size={20} />
             </IconButton>
           </>
         ) : (

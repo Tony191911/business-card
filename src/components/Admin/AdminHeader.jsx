@@ -1,7 +1,20 @@
-import { Link } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, LogOut } from 'lucide-react'
+import { supabase } from '../../lib/supabaseClient'
 
 function AdminHeader({ title, subtitle, backTo, status, children, }) {
+  const navigate = useNavigate()
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error(error)
+      alert(error.message || '登出失敗')
+      return
+    }
+    navigate('/login', { replace: true })
+  }
+
   return (
     <header className="flex items-center justify-between border-b border-[#E0E4E8] bg-white px-6 py-3">
       <div className="flex items-center gap-3">
@@ -48,7 +61,18 @@ function AdminHeader({ title, subtitle, backTo, status, children, }) {
         </div>
       </div>
 
-      {children && <div>{children}</div>}
+      <div className="flex items-center gap-3">
+        {children}
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex items-center gap-2 rounded-lg border border-[#E0E4E8] px-3 py-2 text-sm font-semibold text-[#677489] transition-colors hover:bg-[#f3f4f5]"
+        >
+          <LogOut size={17} />
+          登出
+        </button>
+      </div>
     </header>
   )
 }

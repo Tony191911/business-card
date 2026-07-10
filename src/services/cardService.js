@@ -38,6 +38,19 @@ export async function getCardBySlug(slug) {
   return mapCardFromDb(data)
 }
 
+export async function getPublishedCardBySlug(slug) {
+  const { data, error } = 
+      await supabase.from('cards').select(cardSelect).eq('slug', slug)
+      .eq('status', 'published').maybeSingle()
+  if (error) {
+    throw error
+  }
+  if (!data) {
+    return null
+  }
+  return mapCardFromDb(data)
+}
+
 export async function saveCard(card) {
   const cardPayload = mapCardToDb(card)
   let savedCard
@@ -88,15 +101,30 @@ export async function saveCard(card) {
   return getCardById(cardId)
 }
 
-export async function getPublishedCardBySlug(slug) {
-  const { data, error } = 
-      await supabase.from('cards').select(cardSelect).eq('slug', slug)
-      .eq('status', 'published').maybeSingle()
+export async function updateCardStatus(id, status) {
+  const payload = {
+    status,
+    updated_at: new Date().toISOString(),
+    published_at: status === 'published' ? new Date().toISOString() : null,
+  }
+  const { data, error } = await supabase
+    .from('cards')
+    .update(payload)
+    .eq('id', id)
+    .select(cardSelect)
+    .single()
   if (error) {
     throw error
   }
-  if (!data) {
-    return null
-  }
   return mapCardFromDb(data)
+}
+
+export async function deleteCard(id) {
+  const { error } = await supabase
+    .from('cards')
+    .delete()
+    .eq('id', id)
+  if (error) {
+    throw error
+  }
 }

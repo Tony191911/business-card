@@ -1,10 +1,10 @@
 import { useEffect ,useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Plus, Search, } from 'lucide-react'
-import { getCards, } from '../services/cardService'
+import { Link, useNavigate } from 'react-router-dom'
+import { Plus, Search, LogOut } from 'lucide-react'
+import { supabase } from '../lib/supabaseClient'
+import { getCards, updateCardStatus, deleteCard, } from '../services/cardService'
 import AdminLayout from '../components/Admin/AdminLayout'
 import CardItem from '../components/Admin/CardItem'
-
 
 function AdminPage() {
   const [cards, setCards] = useState([])
@@ -12,13 +12,13 @@ function AdminPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function loadCards() {
       try {
         setIsLoading(true)
         setErrorMessage('')
-
         const cardsFromDb = await getCards()
         setCards(cardsFromDb)
       } catch (error) {
@@ -31,6 +31,16 @@ function AdminPage() {
 
     loadCards()
   }, [])
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut()
+    if (error) {
+      console.error(error)
+      alert(error.message || '登出失敗')
+      return
+    }
+    navigate('/login', { replace: true })
+  }
 
   const counts = useMemo(() => {
     return {
@@ -65,20 +75,41 @@ function AdminPage() {
     }
   }
 
-  function refreshCards() {
-    setCards(getCards())
+  async function refreshCards() {
+    const cardsFromDb = await getCards()
+    setCards(cardsFromDb)
   }
 
-  function handleArchiveCard() {
-    alert('封存功能下一步再接 Supabase')
+  async function handleArchiveCard(cardId) {
+    try {
+      await updateCardStatus(cardId, 'archived')
+      await refreshCards()
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '封存失敗')
+    }
   }
 
-  function handleRestoreCard() {
-    alert('還原功能下一步再接 Supabase')
+  async function handleRestoreCard(cardId) {
+    try {
+      await updateCardStatus(cardId, 'draft')
+      await refreshCards()
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '還原失敗')
+    }
   }
 
-  function handleDeleteCard() {
-    alert('刪除功能下一步再接 Supabase')
+  async function handleDeleteCard(cardId) {
+    const confirmed = window.confirm('確定要刪除這張名片嗎？')
+    if (!confirmed) return
+    try {
+      await deleteCard(cardId)
+      await refreshCards()
+    } catch (error) {
+      console.error(error)
+      alert(error.message || '刪除失敗')
+    }
   }
 
   return (
@@ -96,6 +127,15 @@ function AdminPage() {
             className="w-full border-none bg-transparent p-0 text-sm text-[#1A2B3C] outline-none placeholder:text-[#677489] focus:ring-0"
           />
         </div>
+        
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex shrink-0 items-center gap-2 rounded-lg border border-[#E0E4E8] px-3 py-2 text-sm font-semibold text-[#677489] transition-colors hover:bg-[#f3f4f5]"
+        >
+          <LogOut size={17} />
+          <span className="hidden sm:inline">登出</span>
+        </button>
       </header>
 
       {/* Page Content */}
