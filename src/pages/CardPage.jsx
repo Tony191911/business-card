@@ -120,7 +120,7 @@ function CardPage() {
 
   return (
     <Wrapper>
-      <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-white lg:min-h-190 lg:max-w-107.5 lg:rounded-2xl lg:shadow-2xl">
+      <main className="relative w-full">
         <CardContent data={data} onAddContact={handleAddContact} />
       </main>
     </Wrapper>
