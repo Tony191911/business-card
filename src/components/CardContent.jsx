@@ -1,4 +1,4 @@
-import { Share2, Smartphone, UserCircle, UserPlus } from 'lucide-react'
+import { Share2, UserCircle, UserPlus } from 'lucide-react'
 import PublicActionBtn from './PublicActionBtn'
 
 function CardContent({ data, onAddContact, showActions = true }) {
@@ -23,10 +23,10 @@ function CardContent({ data, onAddContact, showActions = true }) {
           <img
             src={data.avatarUrl}
             alt={data.name}
-            className="h-[100px] w-[100px] rounded-full border border-gray-200 bg-white object-cover p-1 shadow-sm"
+            className="h-25 w-25 rounded-full border border-gray-200 bg-white object-cover p-1 shadow-sm"
           />
         ) : (
-          <div className="flex h-[100px] w-[100px] items-center justify-center rounded-full border border-gray-200 bg-white p-1 shadow-sm">
+          <div className="flex h-25 w-25 items-center justify-center rounded-full border border-gray-200 bg-white p-1 shadow-sm">
             <UserCircle size={62} strokeWidth={1.2} className="text-gray-300" />
           </div>
         )}
@@ -56,46 +56,40 @@ function CardContent({ data, onAddContact, showActions = true }) {
 
       {/* 下半部：名片資訊 */}
       <section className="flex flex-1 flex-col bg-white px-8 pb-8 pt-10">
-        {/* primary-contact：行動電話 + 服務項目 */}
+        {/* 行動電話 + 服務項目 */}
         {(data.mobile || sortedServices.length > 0) && (
-          <div className="flex justify-between" style={{ marginBottom: 0, gap: 16 }}>
-            {/* 左欄：行動電話 */}
-            <div
-              className="flex flex-col items-center"
-              style={{ transform: 'translateX(40px)' }}
-            >
-              <div className="flex items-center justify-center" style={{ height: 20 }}>
-                <Smartphone size={20} strokeWidth={1.5} className="text-gray-400" />
+          <div className="flex w-full flex-col">
+            {/* 上方：手機號碼 */}
+            {data.mobile && (
+              <div className="border-b border-[#E8EBEF] py-5">
+                <p className="mb-2 text-xs tracking-wider text-[#8B9AB2]">
+                  手機號碼
+                </p>
+
+                <a
+                  href={`tel:${data.mobile}`}
+                  className="text-base font-medium text-[#17345B]"
+                >
+                  {data.mobile}
+                </a>
               </div>
+            )}
 
-              {data.mobile && (
-                <div
-                  className="flex flex-1 items-center justify-center"
-                  style={{ marginTop: 12 }}
-                >
-                  <p className="text-[13px] text-gray-800">{data.mobile}</p>
-                </div>
-              )}
-            </div>
-
-            {/* 右欄：服務項目 */}
+            {/* 下方：服務項目 */}
             {sortedServices.length > 0 && (
-              <div className="flex flex-col" style={{ gap: 6, width: '55%' }}>
-                <p
-                  className="text-center text-[13px] text-gray-400"
-                  style={{ height: 20, lineHeight: '20px' }}
-                >
+              <div className="border-b border-[#E8EBEF] py-5">
+                <p className="mb-4 text-xs tracking-wider text-[#8B9AB2]">
                   服務項目
                 </p>
 
-                <div
-                  className="flex flex-col items-start"
-                  style={{ gap: 3, paddingLeft: 16 }}
-                >
+                <div className="grid grid-cols-2 gap-3">
                   {sortedServices.map((service) => (
-                    <p key={service.id} className="text-[13px] text-gray-800">
-                      · {service.serviceName}
-                    </p>
+                    <div
+                      key={service.id}
+                      className="rounded-md border border-[#D9E2EC] bg-[#F1F5F9] px-2 py-1 text-center text-[12px] font-medium leading-snug text-[#334155]"
+                    >
+                      {service.serviceName}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -104,13 +98,12 @@ function CardContent({ data, onAddContact, showActions = true }) {
         )}
 
         {detailFields.length > 0 && (
-          <hr className="my-8 w-full border-gray-100" />
-        )}
-
-        {detailFields.length > 0 && (
-          <div className="flex w-full flex-col gap-6">
+          <div className="mt-6 flex w-full flex-col gap-6">
             {detailFields.map((field) => (
-              <div key={field.label} className="flex items-start justify-between gap-4">
+              <div
+                key={field.label}
+                className="flex items-start justify-between gap-4"
+              >
                 <span className="w-20 shrink-0 text-[12px] text-[#94A3B8]">
                   {field.label}
                 </span>
