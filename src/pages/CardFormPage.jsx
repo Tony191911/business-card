@@ -9,6 +9,7 @@ import UploadBox from '../components/CardForm/UploadBox'
 import IndustryOption from '../components/CardForm/IndustryOption'
 import ServiceFields from '../components/CardForm/ServiceFields'
 import { uploadCardImage } from '../services/storageService'
+import { createId } from '../utils/createId'
 
 const emptyCard = {
   id: '',
@@ -61,21 +62,26 @@ const sampleCard = {
 
   services: [
     {
-      id: crypto.randomUUID(),
+      id: createId(),
       serviceName: '住宅裝修設計施工',
       sortOrder: 1,
     },
     {
-      id: crypto.randomUUID(),
+      id: createId(),
       serviceName: '系統櫥櫃設計施工',
       sortOrder: 2,
     },
     {
-      id: crypto.randomUUID(),
-      serviceName: '辦公室設備銷售及規劃施工',
+      id: createId(),
+      serviceName: '辦公室設備銷售',
       sortOrder: 3,
     },
-  ],
+    {
+      id: createId(),
+      serviceName: '辦公室規劃施工',
+      sortOrder: 4,
+    },
+  ]
 }
 
 
@@ -189,7 +195,7 @@ function CardFormPage() {
       services: [
         ...prev.services,
         {
-          id: crypto.randomUUID(),
+          id: createId(),
           serviceName: '',
           sortOrder: prev.services.length + 1,
         },

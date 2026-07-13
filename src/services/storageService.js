@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient'
+import { createId } from '../utils/createId'
 
 const BUCKET_NAME = 'card-images'
 const MAX_FILE_SIZE = 10 * 1024 * 1024
@@ -86,7 +87,7 @@ async function compressImageToWebp(
 
   return new File(
     [blob],
-    `${crypto.randomUUID()}.webp`,
+    `${createId()}.webp`,
     {
       type: 'image/webp',
       lastModified: Date.now(),
@@ -111,7 +112,7 @@ export async function uploadCardImage({ file, folderId, imageType, }) {
     quality: 0.8,
   })
 
-  const fileName = `${imageType}-${crypto.randomUUID()}.webp`
+  const fileName = `${imageType}-${createId()}.webp`
 
   const filePath = `cards/${folderId}/${fileName}`
 
