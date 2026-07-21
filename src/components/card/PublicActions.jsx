@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-function PublicActionBtn({
+function PublicActions({
   children,
   icon,
   onClick,
@@ -39,4 +39,4 @@ function PublicActionBtn({
   )
 }
 
-export default PublicActionBtn
+export default PublicActions

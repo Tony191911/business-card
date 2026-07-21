@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getPublishedCardBySlug  } from '../services/cardService'
+import { getPublishedCardBySlug  } from '../../services/cardService'
 import Wrapper from '../assets/wrappers/PublicPage'
 import NotFound from '../components/NotFound'
 import CardContent from '../components/CardContent'
 
-function CardPage() {
+function PublicCardPage() {
   const { slug } = useParams()
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -127,4 +127,4 @@ function CardPage() {
   )
 }
 
-export default CardPage
+export default PublicCardPage

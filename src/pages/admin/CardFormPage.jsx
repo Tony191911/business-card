@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Badge, BriefcaseBusiness, Building2, Camera, Contact, Eye, Link as LinkIcon } from 'lucide-react'
-import { getCardById, saveCard } from '../services/cardService'
-import AdminHeader from '../components/Admin/AdminHeader'
-import AdminLayout from '../components/Admin/AdminLayout'
-import FormField from '../components/CardForm/FormField'
-import UploadBox from '../components/CardForm/UploadBox'
-import IndustryOption from '../components/CardForm/IndustryOption'
-import ServiceFields from '../components/CardForm/ServiceFields'
+import { getCardById, saveCard } from '../../services/cardService'
+import AdminHeader from '../../components/Admin/AdminHeader'
+import AdminLayout from '../../components/Admin/AdminLayout'
+import FormField from '../../components/CardForm/FormField'
+import UploadBox from '../../components/CardForm/UploadBox'
+import IndustryOption from '../../components/CardForm/IndustryOption'
+import ServiceFields from '../../components/CardForm/ServiceFields'
 import { uploadCardImage } from '../services/storageService'
-import { createId } from '../utils/createId'
+import { createId } from '../../utils/createId'
 
 const emptyCard = {
   id: '',

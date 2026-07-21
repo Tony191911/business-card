@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-function NotFound() {
+function CardNotFound() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#f0f0f0] px-6">
       <div className="rounded-2xl bg-white px-8 py-10 text-center shadow-sm">
@@ -23,4 +23,4 @@ function NotFound() {
   )
 }
 
-export default NotFound
+export default CardNotFound

@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Copy, Edit, Eye, Info, Save, Upload, } from 'lucide-react'
-import { getCardById, saveCard } from '../services/cardService'
+import { getCardById, saveCard } from '../../services/cardService'
 import CardContent from '../components/CardContent'
-import NotFound from '../components/NotFound'
-import AdminHeader from '../components/Admin/AdminHeader'
-import AdminLayout from '../components/Admin/AdminLayout'
+import AdminHeader from '../../components/admin/AdminHeader'
+import AdminLayout from '../../components/admin/AdminLayout'
 
-function PreviewPage() {
+function CardPreviewPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
@@ -206,4 +204,4 @@ function PreviewPage() {
   )
 }
 
-export default PreviewPage
+export default CardPreviewPage

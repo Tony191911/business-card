@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Download, Link as LinkIcon, UserCircle } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
-import { getPublishedCardBySlug } from '../services/cardService'
+import { getPublishedCardBySlug } from '../../services/cardService'
 import Wrapper from '../assets/wrappers/PublicPage'
 import NotFound from '../components/NotFound'
 
@@ -34,7 +34,7 @@ function CornerMark({ position, inner = false }) {
   )
 }
 
-function SharePage() {
+function CardSharePage() {
   const { slug } = useParams()
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -227,4 +227,4 @@ function SharePage() {
   )
 }
 
-export default SharePage
+export default CardSharePage

@@ -1,12 +1,12 @@
 import { useEffect ,useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Plus, Search, LogOut } from 'lucide-react'
-import { supabase } from '../lib/supabaseClient'
-import { getCards, updateCardStatus, deleteCard, } from '../services/cardService'
-import AdminLayout from '../components/Admin/AdminLayout'
-import CardItem from '../components/Admin/CardItem'
+import { supabase } from '../../lib/supabaseClient'
+import { getCards, updateCardStatus, deleteCard, } from '../../services/cardService'
+import AdminLayout from '../../components/admin/AdminLayout'
+import CardItem from '../../components/admin/CardItem'
 
-function AdminPage() {
+function AdminDashboardPage() {
   const [cards, setCards] = useState([])
   const [statusFilter, setStatusFilter] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
@@ -238,4 +238,4 @@ function FilterButton({ active, children, onClick }) {
   )
 }
 
-export default AdminPage
+export default AdminDashboardPage
