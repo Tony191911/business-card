@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Copy, Edit, Eye, Info, Save, Upload, } from 'lucide-react'
 import { getCardById, saveCard } from '../../services/cardService'
-import CardContent from '../components/CardContent'
+import CardContent from '../../components/card/CardContent'
 import AdminHeader from '../../components/admin/AdminHeader'
 import AdminLayout from '../../components/admin/AdminLayout'
 

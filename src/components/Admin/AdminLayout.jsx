@@ -1,4 +1,4 @@
-import Wrapper from '../../assets/wrappers/AdminLayout'
+import Wrapper from '../../style/AdminLayoutWrapper'
 import AdminSidebar from './AdminSidebar'
 
 function AdminLayout({ children }) {

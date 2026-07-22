@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Download, Link as LinkIcon, UserCircle } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { getPublishedCardBySlug } from '../../services/cardService'
-import Wrapper from '../assets/wrappers/PublicPage'
-import NotFound from '../components/NotFound'
+import Wrapper from '../../style/PublicPageWrapper'
+import NotFound from '../../components/common/CardNotFound'
 
 function CornerMark({ position, inner = false }) {
   const outerPositionStyles = {

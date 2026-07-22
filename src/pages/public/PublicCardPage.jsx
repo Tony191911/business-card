@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getPublishedCardBySlug  } from '../../services/cardService'
-import Wrapper from '../assets/wrappers/PublicPage'
-import NotFound from '../components/NotFound'
-import CardContent from '../components/CardContent'
+import Wrapper from '../../style/PublicPageWrapper'
+import NotFound from '../../components/common/CardNotFound'
+import CardContent from '../../components/card/CardContent'
 
 function PublicCardPage() {
   const { slug } = useParams()

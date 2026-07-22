@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router-dom'
-import CardPage from './pages/CardPage'
-import SharePage from './pages/SharePage'
-import PreviewPage from './pages/PreviewPage'
-import CardFormPage from './pages/CardFormPage'
-import AdminPage from './pages/AdminPage'
-import LoginPage from './pages/LoginPage'
-import ProtectedRoute from './components/Admin/ProtectedRoute'
-import AuthRedirect from './components/AuthRedirect'
+import CardPage from './pages/public/PublicCardPage'
+import SharePage from './pages/public/CardSharePage'
+import PreviewPage from './pages/admin/CardPreviewPage'
+import CardFormPage from './pages/admin/CardFormPage'
+import AdminPage from './pages/admin/AdminDashboardPage'
+import LoginPage from './pages/auth/LoginPage'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import AuthRedirect from './components/auth/AuthRedirect'
 
 function App() {
 
