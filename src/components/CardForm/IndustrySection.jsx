@@ -1,7 +1,7 @@
 import { BriefcaseBusiness } from 'lucide-react'
 import IndustryOption from './IndustryOption'
 
-function Industry({ industry, onChange }) {
+function IndustrySection({ industry, onChange }) {
   return (
     <section className="rounded-xl border border-[#E0E4E8] bg-white p-6 shadow-sm">
       <h3 className="mb-5 flex items-center gap-2 text-xl font-semibold text-[#041627]">
@@ -32,4 +32,4 @@ function Industry({ industry, onChange }) {
   )
 }
 
-export default Industry
+export default IndustrySection

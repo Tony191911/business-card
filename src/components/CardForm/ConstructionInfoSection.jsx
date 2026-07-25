@@ -2,7 +2,7 @@ import { BriefcaseBusiness } from 'lucide-react'
 import FormField from './FormField'
 import ServiceFields from './ServiceFields'
 
-function ConstructionInfo({ 
+function ConstructionInfoSection({ 
     taxId, services, onFieldChange, onAddService, onUpdateService, onRemoveService, }) {
   return (
     <section className="rounded-xl border border-[#E0E4E8] bg-white p-6 shadow-sm">
@@ -30,4 +30,4 @@ function ConstructionInfo({
   )
 }
 
-export default ConstructionInfo
+export default ConstructionInfoSection

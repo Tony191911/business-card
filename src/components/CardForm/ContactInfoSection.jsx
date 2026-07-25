@@ -1,7 +1,7 @@
 import { Contact } from 'lucide-react'
 import FormField from './FormField'
 
-function ContactInfo({ formData, onFieldChange }) {
+function ContactInfoSection({ formData, onFieldChange }) {
   return (
     <section className="rounded-xl border border-[#E0E4E8] bg-white p-6 shadow-sm">
       <h3 className="mb-6 flex items-center gap-2 text-xl font-semibold text-[#041627]">
@@ -58,4 +58,4 @@ function ContactInfo({ formData, onFieldChange }) {
   )
 }
 
-export default ContactInfo
+export default ContactInfoSection

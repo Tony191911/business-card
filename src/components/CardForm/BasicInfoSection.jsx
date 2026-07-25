@@ -2,7 +2,7 @@ import { Badge, Building2, Camera } from 'lucide-react'
 import FormField from './FormField'
 import UploadBox from './UploadBox'
 
-function BasicInfo({ formData, uploadingType, onFieldChange, onImageUpload, }) {
+function BasicInfoSection({ formData, uploadingType, onFieldChange, onImageUpload, }) {
   return (
     <section className="rounded-xl border border-[#E0E4E8] bg-white p-6 shadow-sm">
       <h3 className="mb-6 flex items-center gap-2 text-xl font-semibold text-[#041627]">
@@ -64,4 +64,4 @@ function BasicInfo({ formData, uploadingType, onFieldChange, onImageUpload, }) {
   )
 }
 
-export default BasicInfo
+export default BasicInfoSection
