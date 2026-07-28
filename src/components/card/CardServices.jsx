@@ -7,7 +7,7 @@ function CardServices({ services = [] }) {
 
   return (
     <section>
-      <h2 className="mb-2.5 mt-[26px] font-mono text-[10.5px] font-normal uppercase tracking-[0.14em] text-[#8C7A63]">
+      <h2 className="mb-2.5 mt-[26px] font-en text-[12px] font-normal uppercase tracking-[0.12em] text-[#8C7A63]">
         服務項目
       </h2>
 
@@ -15,7 +15,7 @@ function CardServices({ services = [] }) {
         {sortedServices.map((service) => (
           <div
             key={service.id}
-            className="flex items-center gap-2 border-b border-dashed border-[rgba(169,116,58,0.28)] py-[9px] text-[12.5px] leading-relaxed text-[#2E2822] [&:nth-last-child(-n+2)]:border-b-0"
+            className="flex items-center gap-2 border-b border-dashed border-[rgba(169,116,58,0.28)] py-[9px] text-[15px] leading-relaxed text-[#2E2822] [&:nth-last-child(-n+2)]:border-b-0"
           >
             <span className="h-[5px] w-[5px] shrink-0 rotate-45 border border-[#A9743A]" />
             <span>{service.serviceName}</span>

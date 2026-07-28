@@ -3,13 +3,6 @@ import { UserCircle } from 'lucide-react'
 function CardIdentity({ data }) {
   return (
     <>
-      <div className="mb-[22px] flex items-center justify-center gap-2">
-        <span className="h-px w-5 bg-[#C9A877]" />
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#A9743A]">
-          數位名片
-        </p>
-        <span className="h-px w-5 bg-[#C9A877]" />
-      </div>
 
       <div className="relative mx-auto mb-[18px] h-[104px] w-[104px]">
         <div className="absolute -inset-1.5 rounded-full border border-[#A9743A]" />
@@ -27,7 +20,7 @@ function CardIdentity({ data }) {
         )}
       </div>
 
-      <h1 className="m-0 text-center font-serif text-[26px] font-bold leading-tight tracking-[0.06em] text-[#2E2822]">
+      <h1 className="m-0 text-center font-ch text-[26px] font-bold leading-tight tracking-[0.06em] text-[#2E2822]">
         {data.name}
       </h1>
 
@@ -44,7 +37,7 @@ function CardIdentity({ data }) {
       )}
 
       {data.companyEn && (
-        <p className="mt-0.5 text-center font-mono text-[11px] italic tracking-[0.08em] text-[#8C7A63]">
+        <p className="mt-0.5 text-center font-en text-[11px] italic tracking-[0.08em] text-[#8C7A63]">
           {data.companyEn}
         </p>
       )}

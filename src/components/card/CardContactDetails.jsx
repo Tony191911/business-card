@@ -1,31 +1,31 @@
 function CardContactDetails({ data }) {
   const detailFields = [
     {
-      label: 'TEL',
+      label: '手機',
       value: data.mobile,
       href: data.mobile ? `tel:${data.mobile}` : '',
       isChinese: false,
     },
     {
-      label: 'OFFICE',
+      label: '電話',
       value: data.officePhone,
       href: data.officePhone ? `tel:${data.officePhone}` : '',
       isChinese: false,
     },
     {
-      label: 'FAX',
+      label: '傳真',
       value: data.fax,
       href: '',
       isChinese: false,
     },
     {
-      label: 'EMAIL',
+      label: '信箱',
       value: data.email,
       href: data.email ? `mailto:${data.email}` : '',
       isChinese: false,
     },
     {
-      label: 'ADDR',
+      label: '地址',
       value: data.address,
       href: data.address
         ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -54,18 +54,18 @@ function CardContactDetails({ data }) {
     <div>
       {detailFields.map((field) => {
         const valueClassName = field.isChinese
-          ? 'font-sans text-[13px] leading-relaxed'
-          : 'font-mono text-[14px]'
+          ? 'font-sans text-[16px] leading-relaxed'
+          : 'font-en text-[15px]'
 
         const openInNewTab =
-          field.label === 'ADDR' || field.label === 'WEB'
+          field.label === '地址' || field.label === 'WEB'
 
         return (
           <div
             key={field.label}
             className="flex items-baseline justify-between gap-3 border-b border-dashed border-[rgba(169,116,58,0.28)] py-[11px] last:border-b-0"
           >
-            <span className="shrink-0 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#8C7A63]">
+            <span className="shrink-0 font-en text-[12px] uppercase tracking-[0.12em] text-[#8C7A63]">
               {field.label}
             </span>
 

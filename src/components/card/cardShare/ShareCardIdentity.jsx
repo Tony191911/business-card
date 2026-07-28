@@ -20,7 +20,7 @@ function ShareCardIdentity({ data }) {
           )}
         </div>
 
-        <p className="text-center font-serif text-[19px] font-bold tracking-[0.05em] text-[#2E2822]">
+        <p className="text-center font-ch text-[19px] font-bold tracking-[0.05em] text-[#2E2822]">
           {data.name}
         </p>
 

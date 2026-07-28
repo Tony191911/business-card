@@ -1,6 +1,6 @@
 import { Download, Link as LinkIcon } from 'lucide-react'
 import { QRCodeCanvas } from 'qrcode.react'
-import CornerMark from '../card/CornerMark'
+import CornerMark from '../../card/CornerMark'
 
 function QrCodeSection({ cardUrl, onDownload, onCopy, }) {
   return (
@@ -44,7 +44,7 @@ function QrCodeSection({ cardUrl, onDownload, onCopy, }) {
         onClick={onCopy}
         className="mt-3.5 flex w-full items-center justify-between gap-2.5 border border-dashed border-[rgba(169,116,58,0.28)] px-3 py-[11px] text-left"
       >
-        <span className="min-w-0 break-all font-mono text-[10.5px] tracking-[0.02em] text-[#2E2822]">
+        <span className="min-w-0 break-all font-en text-[10.5px] tracking-[0.02em] text-[#2E2822]">
           {cardUrl.replace(/^https?:\/\//, '')}
         </span>
 
