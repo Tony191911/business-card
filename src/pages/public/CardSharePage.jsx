@@ -1,43 +1,19 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
-import { getPublishedCardBySlug } from '../../services/cardService'
+import { useParams } from 'react-router-dom'
 import Wrapper from '../../style/PublicPageWrapper'
 import NotFound from '../../components/common/CardNotFound'
 import CornerMark from '../../components/card/CornerMark'
 import ShareCardIdentity from '../../components/card/cardShare/ShareCardIdentity'
 import QrCodeSection from '../../components/card/cardShare/QrCodeSection'
+import ShareHeader from '../../components/card/cardShare/ShareHeader'
+import { usePublishedCard } from '../../hooks/usePublishedCard'
 
 function CardSharePage() {
   const { slug } = useParams()
-  const [data, setData] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
-
-  useEffect(() => {
-    async function loadCard() {
-      try {
-        setIsLoading(true)
-        setErrorMessage('')
-
-        const card = await getPublishedCardBySlug(slug)
-
-        if (!card) {
-          setErrorMessage('找不到名片')
-          return
-        }
-
-        setData(card)
-      } catch (error) {
-        console.error(error)
-        setErrorMessage('讀取名片失敗')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    loadCard()
-  }, [slug])
+  const {
+    data,
+    isLoading,
+    errorMessage,
+  } = usePublishedCard(slug)
 
   if (isLoading) {
     return (
@@ -91,19 +67,7 @@ function CardSharePage() {
 
         <div className="relative z-10">
           {/* 上方導覽 */}
-          <header className="relative mb-[22px] flex items-center justify-center">
-            <Link
-              to={`/card/${data.slug}`}
-              aria-label="返回名片"
-              className="absolute left-0 top-1/2 flex h-[30px] w-[30px] -translate-y-1/2 items-center justify-center border border-[#A9743A] text-[#A9743A] transition-colors hover:bg-[#A9743A]/10"
-            >
-              <ArrowLeft size={15} strokeWidth={1.5} />
-            </Link>
-
-            <h1 className="font-mono text-[11px] font-normal uppercase tracking-[0.18em] text-[#A9743A]">
-              分享名片
-            </h1>
-          </header>
+          <ShareHeader slug={data.slug} />
 
           {/* 名片身份 */}
           <ShareCardIdentity data={data} />
