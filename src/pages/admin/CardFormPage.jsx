@@ -6,7 +6,7 @@ import ContactInfoSection from '../../components/cardForm/ContactInfoSection'
 import ConstructionInfoSection from '../../components/cardForm/ConstructionInfoSection'
 import IndustrySection from '../../components/cardForm/IndustrySection'
 import UrlSettingSection from '../../components/cardForm/UrlSettingSection'
-import { CardFormActions } from '../../components/cardForm/CardFormActions'
+import CardFormActions  from '../../components/cardForm/CardFormActions'
 import { useCardForm } from '../../hooks/useCardForm'
 
 function CardFormPage() {

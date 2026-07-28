@@ -9,17 +9,13 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import AuthRedirect from './components/auth/AuthRedirect'
 
 function App() {
-
   return (
     <Routes>
       <Route path="/" element={<AuthRedirect />} />
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/admin/cards/new" element={<CardFormPage />} />
-      <Route path="/admin/cards/:id/edit" element={<CardFormPage />} />
-      <Route path='/card/:slug' element={<CardPage />} />
-      <Route path="/card/:slug/share" element={<SharePage />} />
-      <Route path="/admin/cards/:id/preview" element={<PreviewPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/card/:slug" element={<CardPage />} />
+      <Route path="/card/:slug/share" element={<SharePage />} />
+
       <Route
         path="/admin"
         element={
