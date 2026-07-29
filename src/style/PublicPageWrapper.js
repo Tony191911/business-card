@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  min-height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -10,7 +9,6 @@ const Wrapper = styled.div`
   > main {
     width: 100%;
     max-width: none;
-    min-height: 100vh;
     box-shadow: none;
   }
 
@@ -22,7 +20,6 @@ const Wrapper = styled.div`
     > main {
       width: 100%;
       max-width: 390px;
-      min-height: auto;
       box-shadow: 0 30px 70px rgba(0, 0, 0, 0.4);
     }
   }

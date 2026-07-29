@@ -4,7 +4,6 @@
 html,
 body,
 #root {
-  min-height: 100%;
   margin: 0;
 }
 
@@ -15,10 +14,6 @@ body {
     "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-#root {
-  min-height: 100vh;
 }
 
 * {

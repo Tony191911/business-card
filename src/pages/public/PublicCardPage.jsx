@@ -36,10 +36,28 @@ function PublicCardPage() {
     }
   }
 
+  async function handleCopyLink() {
+    try {
+      const cardUrl =
+        `${window.location.origin}/card/${data.slug}`
+
+      await navigator.clipboard.writeText(cardUrl)
+
+      alert('已複製名片連結')
+    } catch (error) {
+      console.error(error)
+      alert('複製連結失敗')
+    }
+  }
+
   return (
     <Wrapper>
       <main className="relative w-full">
-        <CardContent data={data} onAddContact={handleAddContact} />
+        <CardContent
+          data={data}
+          onAddContact={handleAddContact}
+          onCopyLink={handleCopyLink}
+        />
       </main>
     </Wrapper>
   )

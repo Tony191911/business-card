@@ -2,11 +2,11 @@ import CornerMark from './CornerMark'
 import CardIdentity from './CardIdentity'
 import CardContactDetails from './CardContactDetails'
 import CardServices from './CardServices'
-import PublicActions from './CardActions'
+import CardActions from './CardActions'
 
-function CardContent({ data, onAddContact, showActions = true }) {
+function CardContent({ data, onAddContact, onCopyLink, showActions = true }) {
   return (
-    <article className="relative min-h-screen w-full overflow-hidden bg-[#EDE7D9] px-6 pb-6 pt-7 text-[#2E2822] sm:min-h-0 sm:rounded-[2px]">
+    <article className="relative w-full overflow-hidden bg-[#EDE7D9] px-6 pb-4 pt-7 text-[#2E2822] sm:rounded-[2px]">
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
@@ -23,15 +23,17 @@ function CardContent({ data, onAddContact, showActions = true }) {
       <CornerMark position="bl" />
       <CornerMark position="br" />
 
-      <div className="relative z-10 flex min-h-[calc(100vh-52px)] flex-col sm:min-h-0">
+      <div className="relative z-10 flex flex-col">
         <CardIdentity data={data} />
         <CardContactDetails data={data} />
         <CardServices services={data.services} />
 
         {showActions && (
-          <PublicActions
+          <CardActions
             slug={data.slug}
+            mobile={data.mobile}
             onAddContact={onAddContact}
+            onCopyLink={onCopyLink}
           />
         )}
       </div>

@@ -9,11 +9,7 @@ import { usePublishedCard } from '../../hooks/usePublishedCard'
 
 function CardSharePage() {
   const { slug } = useParams()
-  const {
-    data,
-    isLoading,
-    errorMessage,
-  } = usePublishedCard(slug)
+  const { data, isLoading, errorMessage, } = usePublishedCard(slug)
 
   if (isLoading) {
     return (

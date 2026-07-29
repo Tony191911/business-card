@@ -3,7 +3,6 @@ import { UserCircle } from 'lucide-react'
 function CardIdentity({ data }) {
   return (
     <>
-
       <div className="relative mx-auto mb-[18px] h-[104px] w-[104px]">
         <div className="absolute -inset-1.5 rounded-full border border-[#A9743A]" />
 
@@ -20,7 +19,7 @@ function CardIdentity({ data }) {
         )}
       </div>
 
-      <h1 className="m-0 text-center font-ch text-[26px] font-bold leading-tight tracking-[0.06em] text-[#2E2822]">
+      <h1 className="m-0 mb-1 text-center font-ch text-[26px] font-bold leading-tight tracking-[0.06em] text-[#2E2822]">
         {data.name}
       </h1>
 

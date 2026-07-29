@@ -7,7 +7,7 @@ function CardServices({ services = [] }) {
 
   return (
     <section>
-      <h2 className="mb-2.5 mt-[26px] font-en text-[12px] font-normal uppercase tracking-[0.12em] text-[#8C7A63]">
+      <h2 className="mb-2.5 mt-[18px] font-en text-[12px] font-normal uppercase tracking-[0.12em] text-[#8C7A63]">
         服務項目
       </h2>
 
