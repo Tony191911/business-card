@@ -33,6 +33,7 @@ function createVCardLines(card, cardUrl, photoLine) {
   return [
     'BEGIN:VCARD',
     'VERSION:3.0',
+    `N:${card.name || ''};;;;`,
     `FN:${card.name || ''}`,
     `ORG:${card.company || ''}`,
     `TITLE:${card.title || ''}`,
