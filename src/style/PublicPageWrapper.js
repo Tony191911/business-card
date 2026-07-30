@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
+  min-height: 100dvh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -13,6 +14,7 @@ const Wrapper = styled.div`
   }
 
   @media (min-width: 640px) {
+    min-height: 100vh;
     align-items: center;
     padding: 48px 16px;
     background: #1c1a17;

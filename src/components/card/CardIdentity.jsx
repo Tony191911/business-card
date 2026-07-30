@@ -41,7 +41,7 @@ function CardIdentity({ data }) {
         </p>
       )}
 
-      <div className="mb-[22px] mt-6 flex items-center gap-2.5">
+      <div className="mb-[18px] mt-6 flex items-center gap-2.5">
         <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C9A877] to-[#C9A877]" />
         <span className="h-[5px] w-[5px] rotate-45 border border-[#A9743A]" />
         <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#C9A877] to-[#C9A877]" />

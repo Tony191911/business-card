@@ -55,7 +55,7 @@ function CardSharePage() {
 
   return (
     <Wrapper>
-      <main className="relative min-h-screen w-full overflow-hidden bg-[#EDE7D9] px-[22px] pb-[26px] pt-[22px] text-[#2E2822] sm:min-h-0 sm:rounded-[2px]">
+      <main className="relative w-full overflow-hidden bg-[#EDE7D9] px-[22px] pb-5 pt-[18px] text-[#2E2822] sm:rounded-[2px]">
         <CornerMark position="tl" />
         <CornerMark position="tr" />
         <CornerMark position="bl" />
