@@ -11,14 +11,11 @@ export function usePublishedCard(slug) {
       try {
         setIsLoading(true)
         setErrorMessage('')
-
         const card = await getPublishedCardBySlug(slug)
-
         if (!card) {
           setErrorMessage('找不到名片')
           return
         }
-
         setData(card)
       } catch (error) {
         console.error(error)
@@ -27,7 +24,6 @@ export function usePublishedCard(slug) {
         setIsLoading(false)
       }
     }
-
     loadCard()
   }, [slug])
 
