@@ -29,21 +29,21 @@ export const emptyCard = {
 export function createSampleCard() {
   return {
     ...emptyCard,
-    slug: 'cheng-li-design',
+    slug: 'demo-design-studio',
     status: 'draft',
     industry: 'construction',
 
-    name: '覃慧芬',
+    name: '王小明',
     title: '室內設計師',
-    company: '承麗實業有限公司',
-    companyEn: 'Cheng Li Co., Ltd.',
+    company: '示範室內設計有限公司',
+    companyEn: 'Demo Design Studio Co., Ltd.',
 
-    mobile: '0937-721470',
+    mobile: '0912-345-678',
     officePhone: '',
-    fax: '04-2381-1649',
-    email: 'fen19192005@yahoo.com.tw',
-    address: '408台中市南屯區楓和路676號',
-    taxId: '80433113',
+    fax: '04-1234-5678',
+    email: 'demo@example.com',
+    address: '400台中市中區示範路1號',
+    taxId: '12345678',
 
     website: '',
     avatarUrl: '',
