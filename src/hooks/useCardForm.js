@@ -4,6 +4,8 @@ import { getCardById, saveCard } from '../services/cardService'
 import { uploadCardImage } from '../services/imgUploadService'
 import { createId } from '../utils/createId'
 import { emptyCard, createSampleCard, } from '../data/cardFormData'
+import { FIELDS } from '../config/fields'
+import { cardPreset } from '../config/cardPreset'
 
 export function useCardForm(id) {
   const navigate = useNavigate()
@@ -151,14 +153,14 @@ export function useCardForm(id) {
   }
 
   function validatePublishData() {
-    if (!formData.name.trim()) {
-      alert('請輸入姓名')
-      return false
+    // 必填清單以 cardPreset.required 為唯一真相
+    for (const key of cardPreset.required) {
+      if (!String(formData[key] ?? '').trim()) {
+        alert(`請輸入${FIELDS[key].label}`)
+        return false
+      }
     }
-    if (!formData.company.trim()) {
-      alert('請輸入公司名稱')
-      return false
-    }
+    // slug 是系統欄位不是名片內容，單獨檢查
     if (!formData.slug.trim()) {
       alert('請輸入網址代稱')
       return false

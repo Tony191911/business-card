@@ -1,26 +1,21 @@
+import { COLUMN_PAIRS } from '../config/fields'
+
+// 名片內容欄位由 config/fields.js 的登記表驅動；
+// 系統欄位（id / slug / status / industry / 時間戳）不屬於名片內容，維持明寫。
+
 export function mapCardFromDb(row) {
+  const content = {}
+  COLUMN_PAIRS.forEach(([key, column]) => {
+    content[key] = key === 'name' ? row[column] : row[column] || ''
+  })
+
   return {
     id: row.id,
     slug: row.slug,
     status: row.status,
     industry: row.industry,
 
-    name: row.name,
-    title: row.title || '',
-    company: row.company || '',
-    companyEn: row.company_en || '',
-
-    mobile: row.mobile || '',
-    officePhone: row.office_phone || '',
-    fax: row.fax || '',
-    email: row.email || '',
-    address: row.address || '',
-    taxId: row.tax_id || '',
-
-    website: row.website || '',
-
-    avatarUrl: row.avatar_url || '',
-    logoUrl: row.logo_url || '',
+    ...content,
 
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -37,27 +32,17 @@ export function mapCardFromDb(row) {
 }
 
 export function mapCardToDb(card) {
+  const content = {}
+  COLUMN_PAIRS.forEach(([key, column]) => {
+    content[column] = key === 'name' ? card[key] : card[key] || null
+  })
+
   return {
     slug: card.slug,
     status: card.status,
     industry: card.industry,
 
-    name: card.name,
-    title: card.title || null,
-    company: card.company || null,
-    company_en: card.companyEn || null,
-
-    mobile: card.mobile || null,
-    office_phone: card.officePhone || null,
-    fax: card.fax || null,
-    email: card.email || null,
-    address: card.address || null,
-    tax_id: card.taxId || null,
-
-    website: card.website || null,
-
-    avatar_url: card.avatarUrl || null,
-    logo_url: card.logoUrl || null,
+    ...content,
 
     updated_at: new Date().toISOString(),
     published_at:

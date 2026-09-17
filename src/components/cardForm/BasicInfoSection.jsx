@@ -1,4 +1,4 @@
-import { Badge, Building2, Camera } from 'lucide-react'
+import { Badge, Camera } from 'lucide-react'
 import FormField from './FormField'
 import UploadBox from './UploadBox'
 
@@ -19,15 +19,6 @@ function BasicInfoSection({ formData, uploadingType, onFieldChange, onImageUploa
           imageUrl={formData.avatarUrl}
           uploading={uploadingType === 'avatar'}
           onFileSelect={(file) => onImageUpload('avatar', file)}
-        />
-
-        <UploadBox
-          label="公司商標 (Logo)"
-          icon={<Building2 size={26} />}
-          description="點擊上傳公司 Logo（建議橫式）"
-          imageUrl={formData.logoUrl}
-          uploading={uploadingType === 'logo'}
-          onFileSelect={(file) => onImageUpload('logo', file)}
         />
       </div>
 
@@ -54,7 +45,7 @@ function BasicInfoSection({ formData, uploadingType, onFieldChange, onImageUploa
         />
 
         <FormField
-          label="職稱 (Title) *"
+          label="職稱 (Title)"
           placeholder="例如：室內設計師"
           value={formData.title}
           onChange={(value) => onFieldChange('title', value)}

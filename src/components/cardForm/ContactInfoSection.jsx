@@ -1,7 +1,17 @@
 import { Contact } from 'lucide-react'
 import FormField from './FormField'
+import { FIELDS } from '../../config/fields'
 
 function ContactInfoSection({ formData, onFieldChange }) {
+  // 把 key 展開成 FormField 需要的 props，label / placeholder 一律查登記表
+  const field = (key, extra = {}) => ({
+    label: FIELDS[key].formLabel,
+    placeholder: FIELDS[key].placeholder,
+    value: formData[key],
+    onChange: (value) => onFieldChange(key, value),
+    ...extra,
+  })
+
   return (
     <section className="rounded-xl border border-[#E0E4E8] bg-white p-6 shadow-sm">
       <h3 className="mb-6 flex items-center gap-2 text-xl font-semibold text-[#041627]">
@@ -10,49 +20,12 @@ function ContactInfoSection({ formData, onFieldChange }) {
       </h3>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <FormField
-          label="手機號碼 (Mobile)"
-          placeholder="0900-000-000"
-          value={formData.mobile}
-          onChange={(value) => onFieldChange('mobile', value)}
-        />
-
-        <FormField
-          label="電子信箱 (Email)"
-          placeholder="example@company.com"
-          value={formData.email}
-          onChange={(value) => onFieldChange('email', value)}
-        />
-
-        <FormField
-          label="公司電話 (Phone)"
-          placeholder="02-1234-5678"
-          value={formData.officePhone}
-          onChange={(value) => onFieldChange('officePhone', value)}
-        />
-
-        <FormField
-          label="傳真 (Fax)"
-          placeholder="02-1234-5679"
-          value={formData.fax}
-          onChange={(value) => onFieldChange('fax', value)}
-        />
-
-        <FormField
-          label="公司地址 (Address)"
-          placeholder="請輸入完整地址"
-          value={formData.address}
-          onChange={(value) => onFieldChange('address', value)}
-          full
-        />
-
-        <FormField
-          label="官方網站 (Website)"
-          placeholder="https://www.company.com"
-          value={formData.website}
-          onChange={(value) => onFieldChange('website', value)}
-          full
-        />
+        <FormField {...field('mobile')} />
+        <FormField {...field('email')} />
+        <FormField {...field('officePhone')} />
+        <FormField {...field('fax')} />
+        <FormField {...field('address', { full: true })} />
+        <FormField {...field('website', { full: true })} />
       </div>
     </section>
   )

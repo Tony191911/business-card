@@ -1,3 +1,5 @@
+import { buildVCardLines } from '../config/fields'
+
 function loadImage(url) {
   return new Promise((resolve, reject) => {
     const image = new Image()
@@ -34,18 +36,7 @@ function createVCardLines(card, cardUrl, photoLine) {
     'BEGIN:VCARD',
     'VERSION:3.0',
     `N:${card.name || ''};;;;`,
-    `FN:${card.name || ''}`,
-    `ORG:${card.company || ''}`,
-    `TITLE:${card.title || ''}`,
-    card.mobile ? `TEL;TYPE=CELL:${card.mobile}` : '',
-    card.officePhone
-      ? `TEL;TYPE=WORK:${card.officePhone}`
-      : '',
-    card.email ? `EMAIL:${card.email}` : '',
-    card.address
-      ? `ADR;TYPE=WORK:;;${card.address};;;;`
-      : '',
-    card.website ? `URL:${card.website}` : '',
+    ...buildVCardLines(card),
     photoLine,
     `NOTE:電子名片：${cardUrl}`,
     'END:VCARD',

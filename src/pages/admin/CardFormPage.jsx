@@ -4,7 +4,6 @@ import AdminLayout from '../../components/admin/AdminLayout'
 import BasicInfoSection from '../../components/cardForm/BasicInfoSection'
 import ContactInfoSection from '../../components/cardForm/ContactInfoSection'
 import ConstructionInfoSection from '../../components/cardForm/ConstructionInfoSection'
-import IndustrySection from '../../components/cardForm/IndustrySection'
 import UrlSettingSection from '../../components/cardForm/UrlSettingSection'
 import CardFormActions  from '../../components/cardForm/CardFormActions'
 import { useCardForm } from '../../hooks/useCardForm'
@@ -18,8 +17,6 @@ function CardFormPage() {
     updateService, addService, removeService,
     handleSaveDraft, handlePublish, handlePreview, fillSampleData,
   } = useCardForm(id)
-
-  const isConstruction = formData.industry === 'construction'
 
   if (isLoading) {
     return (
@@ -82,27 +79,18 @@ function CardFormPage() {
               onFieldChange={updateField}
             />
 
-            {/* Construction Info */}
-            {isConstruction && (
-              <ConstructionInfoSection
-                taxId={formData.taxId}
-                services={formData.services}
-                onFieldChange={updateField}
-                onAddService={addService}
-                onUpdateService={updateService}
-                onRemoveService={removeService}
-              />
-            )}
+            <ConstructionInfoSection
+              taxId={formData.taxId}
+              services={formData.services}
+              onFieldChange={updateField}
+              onAddService={addService}
+              onUpdateService={updateService}
+              onRemoveService={removeService}
+            />
           </div>
 
           {/* Right Column */}
           <aside className="flex flex-col gap-6 xl:col-span-4 xl:sticky xl:top-24">
-            {/* Industry */}
-            <IndustrySection
-              industry={formData.industry}
-              onChange={(value) => updateField('industry', value)}
-            />
-
             {/* URL */}
             <UrlSettingSection
               slug={formData.slug}

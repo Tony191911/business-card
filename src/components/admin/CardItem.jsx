@@ -49,12 +49,6 @@ function CardItem({ card, onCopyLink, onArchive, onRestore, onDelete, }) {
       </div>
 
       <div className="mb-6 flex flex-wrap gap-2">
-        <span className="rounded border border-[#E0E4E8] bg-[#f3f4f5] px-2 py-1 text-sm text-[#677489]">
-          {card.industry === 'construction'
-            ? '工程／室內設計版'
-            : '通用版'}
-        </span>
-
         <span
           className={`rounded border border-[#E0E4E8] bg-[#f3f4f5] px-2 py-1 text-sm text-[#677489] ${
             isArchived ? 'line-through' : ''

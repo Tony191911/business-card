@@ -1,29 +1,20 @@
 import { createId } from '../utils/createId'
+import { FIELDS } from '../config/fields'
+import { cardPreset } from '../config/cardPreset'
 
 export const emptyCard = {
   id: '',
   slug: '',
   status: 'draft',
-  industry: 'general',
+  industry: cardPreset.key,
 
-  name: '',
-  title: '',
-  company: '',
-  companyEn: '',
-
-  mobile: '',
-  officePhone: '',
-  fax: '',
-  email: '',
-  address: '',
-  taxId: '',
-
-  website: '',
-
-  avatarUrl: '',
-  logoUrl: '',
-
-  services: [],
+  // 內容欄位由 config/fields.js 的登記表自動展開
+  ...Object.fromEntries(
+    Object.entries(FIELDS).map(([key, def]) => [
+      key,
+      def.type === 'itemList' ? [] : '',
+    ])
+  ),
 }
 
 export function createSampleCard() {
