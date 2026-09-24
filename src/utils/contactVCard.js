@@ -1,4 +1,5 @@
 import { buildVCardLines } from '../config/fields'
+import { foldLine } from './vCardFormat'
 
 function loadImage(url) {
   return new Promise((resolve, reject) => {
@@ -81,7 +82,7 @@ export async function downloadCardContact(card) {
     photoLine
   )
 
-  const vcard = lines.join('\r\n')
+  const vcard = lines.map(foldLine).join('\r\n') + '\r\n'
 
   downloadVCardFile(vcard, card.name)
 }
